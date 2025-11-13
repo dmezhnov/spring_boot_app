@@ -1,0 +1,14 @@
+{
+    "tasks": [
+        {
+            "label": "mise i",
+            "type": "shell",
+            "command": "mise i",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

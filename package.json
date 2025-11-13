@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@usebruno/cli": "^2.14.1"
+  },
+  "trustedDependencies": [
+    "protobufjs"
+  ]
+}

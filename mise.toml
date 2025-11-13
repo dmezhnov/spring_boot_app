@@ -1,0 +1,40 @@
+[settings]
+windows_shim_mode = "symlink"
+asdf_compat = true
+yes = true
+experimental = true
+auto_install = true
+exec_auto_install = true
+not_found_auto_install = true
+task_run_auto_install = true
+lockfile = true
+
+[settings.npm]
+bun = true
+
+[settings.status]
+missing_tools = "always"
+
+[env]
+_.file = '.env'
+
+[hooks]
+postinstall =  '''
+    mvn clean install -DskipTests && bun i
+'''
+
+[tasks.test]
+run = '''
+    mise run test-maven && mise run test-bruno
+'''
+
+[tasks.test-maven]
+run = '''
+    mvn test
+'''
+
+[tasks.test-bruno]
+run = "bun run bruno/test-bruno.bun.ts"
+
+[tasks.start]
+run = "mvn spring-boot:run"
