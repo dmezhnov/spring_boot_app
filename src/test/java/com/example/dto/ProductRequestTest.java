@@ -1,7 +1,7 @@
 package com.example.dto;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 class ProductRequestTest {
 
@@ -14,9 +14,9 @@ class ProductRequestTest {
                 .quantity(2)
                 .build();
 
-        assertEquals("T", r.getTitle());
-        assertEquals("D", r.getDescription());
-        assertEquals(1.5, r.getPrice());
-        assertEquals(2, r.getQuantity());
+        assertEquals(r.getTitle(), "T");
+        assertEquals(r.getDescription(), "D");
+        assertEquals(r.getPrice(), 1.5, 1e-6);
+        assertEquals(r.getQuantity(), 2);
     }
 }

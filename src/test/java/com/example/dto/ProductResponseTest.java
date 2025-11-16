@@ -1,7 +1,7 @@
 package com.example.dto;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 class ProductResponseTest {
 
@@ -18,7 +18,7 @@ class ProductResponseTest {
                 .available(true)
                 .build();
 
-        assertEquals(10L, r.getId());
+        assertEquals(r.getId(), 10L);
         assertTrue(r.isAvailable());
     }
 }

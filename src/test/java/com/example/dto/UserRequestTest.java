@@ -1,7 +1,7 @@
 package com.example.dto;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 class UserRequestTest {
 
@@ -13,7 +13,7 @@ class UserRequestTest {
                 .age(30)
                 .build();
 
-        assertEquals("N", r.getName());
-        assertEquals(30, r.getAge());
+        assertEquals(r.getName(), "N");
+        assertEquals(r.getAge(), 30);
     }
 }

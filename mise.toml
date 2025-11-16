@@ -20,12 +20,12 @@ _.file = '.env'
 
 [hooks]
 postinstall =  '''
-    bun run scripts/gradle.bun.ts build -x test
+    mise build
 '''
 
 [tasks.test-gradle]
 run = '''
-    bun run scripts/gradle.bun.ts test
+    gradle test
 '''
 
 [tasks.test-bruno]
@@ -33,5 +33,17 @@ run = '''
     cd .vscode/bruno-collections && bun i --no-save && bun run test-bruno.bun.ts
 '''
 
+[tasks.test]
+run = '''
+    mise run test-gradle && mise run test-bruno
+'''
+
+[tasks.build]
+run = '''
+    gradle build
+'''
+
 [tasks.start]
-run = "bun run scripts/start.bun.ts"
+run = '''
+    mise build bootJar && java -jar build/libs/spring-boot-app-1.0.0.jar
+'''

@@ -4,8 +4,8 @@ import com.example.dto.ProductRequest;
 import com.example.dto.ProductResponse;
 import com.example.register.ProductRegister;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 class ProductRegisterTest {
 
@@ -21,9 +21,9 @@ class ProductRegisterTest {
                 .build();
 
         ProductResponse resp = service.createProduct(req);
-        assertEquals("Phone", resp.getTitle());
+        assertEquals(resp.getTitle(), "Phone");
         assertTrue(resp.isAvailable());
-        assertEquals(600.0, resp.getTotalValue());
+        assertEquals(resp.getTotalValue(), 600.0, 1e-6);
     }
 
     @Test
@@ -36,7 +36,7 @@ class ProductRegisterTest {
                 .build();
 
         ProductResponse resp = service.applyDiscount(req, 10.0);
-        assertEquals("DISCOUNTED", resp.getCategory());
-        assertEquals(90.0, resp.getPrice());
+        assertEquals(resp.getCategory(), "DISCOUNTED");
+        assertEquals(resp.getPrice(), 90.0, 1e-6);
     }
 }

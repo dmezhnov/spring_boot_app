@@ -4,8 +4,8 @@ import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.register.UserRegister;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 class UserRegisterTest {
 
@@ -20,9 +20,9 @@ class UserRegisterTest {
                 .build();
 
         UserResponse resp = service.processUser(req);
-        assertEquals("ALICE", resp.getName());
-        assertEquals("ACTIVE", resp.getStatus());
-        assertEquals(28, resp.getAge());
+        assertEquals(resp.getName(), "ALICE");
+        assertEquals(resp.getStatus(), "ACTIVE");
+        assertEquals(resp.getAge(), 28);
     }
 
     @Test
@@ -34,6 +34,6 @@ class UserRegisterTest {
                 .build();
 
         UserResponse resp = service.validateUser(req);
-        assertEquals("VALIDATED", resp.getStatus());
+        assertEquals(resp.getStatus(), "VALIDATED");
     }
 }
