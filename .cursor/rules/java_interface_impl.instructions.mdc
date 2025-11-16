@@ -1,0 +1,61 @@
+---
+description: Enforce interface-first design with Impl suffix for implementations
+---
+
+## Java Interface + Impl Naming Rule
+
+In this repository, every concrete implementation class must have a corresponding interface, and the implementation class must be named with the `Impl` suffix.
+
+- MUST:
+  - Define a public interface for each concrete class. The interface name is the base name, and the class name is `<InterfaceName>Impl`.
+  - Place the interface in the same package as its implementation.
+  - Annotate ONLY the implementation with framework/DI/web annotations (e.g., `@Service`, `@Component`, `@RestController`, `@RequestMapping`, `@Transactional`).
+  - Inject and refer to beans by their interface type (constructor injection preferred).
+  - Keep method signatures identical between interface and implementation.
+- MUST NOT:
+  - Introduce a concrete class without a corresponding interface (see exclusions below).
+  - Name an implementation class anything other than `<InterfaceName>Impl`.
+  - Put Spring MVC mapping annotations on interfaces; they belong on implementations.
+- SCOPE:
+  - Applies to controllers, services, repositories, helpers, and utilities.
+  - Exclusions: DTO/value objects (e.g., `com.example.dto`), records, enums, exceptions, the Spring Boot main class (`Application`), `@Configuration` classes, and test classes.
+- MIGRATION:
+  - Rename existing classes to `<InterfaceName>Impl`, create the interface `<InterfaceName>`, and update injections/usages to the interface type.
+  - If multiple implementations exist, use `@Qualifier` on injection points.
+- REVIEW GATE:
+  - Reject changes that add concrete classes without interfaces or violate the `<InterfaceName>Impl` naming.
+  - Request conversion to interface + implementation with correct naming.
+
+### Examples
+
+Service
+```java
+// Interface
+public interface UserRegister {
+    UserResponse processUser(UserRequest request);
+    UserResponse validateUser(UserRequest request);
+}
+
+// Implementation
+@Service
+public class UserRegisterImpl implements UserRegister {
+    // ...
+}
+```
+
+Controller
+```java
+// Interface
+public interface UserController {
+    ResponseEntity<UserResponse> processUser(UserRequest request);
+    ResponseEntity<UserResponse> validateUser(UserRequest request);
+    ResponseEntity<UserResponse> registerUser(UserRequest request);
+}
+
+// Implementation
+@RestController
+@RequestMapping("/api/users")
+public class UserControllerImpl implements UserController {
+    // ...
+}
+```

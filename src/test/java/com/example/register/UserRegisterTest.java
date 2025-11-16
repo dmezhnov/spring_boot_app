@@ -2,14 +2,14 @@ package com.example.register;
 
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
-import com.example.register.UserRegister;
+import com.example.register.UserRegisterImpl;
 
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 class UserRegisterTest {
 
-    private final UserRegister service = new UserRegister();
+    private final UserRegisterImpl service = new UserRegisterImpl();
 
     @Test
     void processUserCreatesActive() {
@@ -20,9 +20,9 @@ class UserRegisterTest {
                 .build();
 
         UserResponse resp = service.processUser(req);
-        assertEquals(resp.getName(), "ALICE");
-        assertEquals(resp.getStatus(), "ACTIVE");
-        assertEquals(resp.getAge(), 28);
+        assertEquals(resp.name, "ALICE");
+        assertEquals(resp.status, "ACTIVE");
+        assertEquals(resp.age, 28);
     }
 
     @Test
@@ -34,6 +34,6 @@ class UserRegisterTest {
                 .build();
 
         UserResponse resp = service.validateUser(req);
-        assertEquals(resp.getStatus(), "VALIDATED");
+        assertEquals(resp.status, "VALIDATED");
     }
 }

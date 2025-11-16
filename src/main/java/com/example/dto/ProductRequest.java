@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProductRequest {
-    private String title;
-    private String description;
-    private double price;
-    private int quantity;
+    public String title;
+    public String description;
+    public double price;
+    public int quantity;
 }

@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class UserResponse {
-    private Long id;
-    private String name;
-    private String email;
-    private int age;
-    private String status;
-    private LocalDateTime createdAt;
+    public Long id;
+    public String name;
+    public String email;
+    public int age;
+    public String status;
+    public LocalDateTime createdAt;
 }

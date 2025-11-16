@@ -18,7 +18,7 @@ class UserResponseTest {
                 .createdAt(now)
                 .build();
 
-        assertEquals(r.getName(), "U");
-        assertEquals(r.getCreatedAt(), now);
+        assertEquals(r.name, "U");
+        assertEquals(r.createdAt, now);
     }
 }

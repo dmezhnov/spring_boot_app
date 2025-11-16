@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProductResponse {
-    private Long id;
-    private String title;
-    private String description;
-    private double price;
-    private int quantity;
-    private double totalValue;
-    private String category;
-    private boolean available;
+    public Long id;
+    public String title;
+    public String description;
+    public double price;
+    public int quantity;
+    public double totalValue;
+    public String category;
+    public boolean available;
 }

@@ -18,7 +18,7 @@ class ProductResponseTest {
                 .available(true)
                 .build();
 
-        assertEquals(r.getId(), 10L);
-        assertTrue(r.isAvailable());
+        assertEquals(r.id, 10L);
+        assertTrue(r.available);
     }
 }

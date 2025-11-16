@@ -2,14 +2,14 @@ package com.example.register;
 
 import com.example.dto.ProductRequest;
 import com.example.dto.ProductResponse;
-import com.example.register.ProductRegister;
+import com.example.register.ProductRegisterImpl;
 
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 class ProductRegisterTest {
 
-    private final ProductRegister service = new ProductRegister();
+    private final ProductRegisterImpl service = new ProductRegisterImpl();
 
     @Test
     void createProductValid() {
@@ -21,9 +21,9 @@ class ProductRegisterTest {
                 .build();
 
         ProductResponse resp = service.createProduct(req);
-        assertEquals(resp.getTitle(), "Phone");
-        assertTrue(resp.isAvailable());
-        assertEquals(resp.getTotalValue(), 600.0, 1e-6);
+        assertEquals(resp.title, "Phone");
+        assertTrue(resp.available);
+        assertEquals(resp.totalValue, 600.0, 1e-6);
     }
 
     @Test
@@ -36,7 +36,7 @@ class ProductRegisterTest {
                 .build();
 
         ProductResponse resp = service.applyDiscount(req, 10.0);
-        assertEquals(resp.getCategory(), "DISCOUNTED");
-        assertEquals(resp.getPrice(), 90.0, 1e-6);
+        assertEquals(resp.category, "DISCOUNTED");
+        assertEquals(resp.price, 90.0, 1e-6);
     }
 }

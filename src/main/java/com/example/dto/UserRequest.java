@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserRequest {
-    private String name;
-    private String email;
-    private int age;
+    public String name;
+    public String email;
+    public int age;
 }

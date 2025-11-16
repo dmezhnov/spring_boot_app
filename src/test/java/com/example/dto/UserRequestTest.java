@@ -13,7 +13,7 @@ class UserRequestTest {
                 .age(30)
                 .build();
 
-        assertEquals(r.getName(), "N");
-        assertEquals(r.getAge(), 30);
+        assertEquals(r.name, "N");
+        assertEquals(r.age, 30);
     }
 }

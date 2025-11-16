@@ -14,9 +14,9 @@ class ProductRequestTest {
                 .quantity(2)
                 .build();
 
-        assertEquals(r.getTitle(), "T");
-        assertEquals(r.getDescription(), "D");
-        assertEquals(r.getPrice(), 1.5, 1e-6);
-        assertEquals(r.getQuantity(), 2);
+        assertEquals(r.title, "T");
+        assertEquals(r.description, "D");
+        assertEquals(r.price, 1.5, 1e-6);
+        assertEquals(r.quantity, 2);
     }
 }
