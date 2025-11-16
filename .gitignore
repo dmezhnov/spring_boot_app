@@ -1,5 +1,7 @@
 target/
-.idea/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 .classpath
 .project
 .settings/

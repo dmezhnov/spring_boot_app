@@ -1,0 +1,22 @@
+meta {
+  name: Calculate Statistics
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/products/calculate
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  "title": "Laptop",
+  "description": "High-performance laptop",
+  "price": 999.99,
+  "quantity": 5
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Transform
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/transform
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  "key1": "value1",
+  "key2": "value2",
+  "key3": 123
+}

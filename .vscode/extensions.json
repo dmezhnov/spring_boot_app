@@ -15,6 +15,8 @@
         "zongou.vs-seti-firacodenerdfont",
         "pkief.material-icon-theme",
         "pkief.material-product-icons",
-        "fill-labs.dependi"
+        "fill-labs.dependi",
+        "oven.bun-vscode",
+        "bruno-api-client.bruno"
     ]
 }

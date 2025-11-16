@@ -15,20 +15,23 @@ bun = true
 [settings.status]
 missing_tools = "always"
 
+[env]
+_.file = '.env'
+
 [hooks]
 postinstall =  '''
-    mvn clean install -DskipTests
+    bun run scripts/gradle.bun.ts build -x test
 '''
 
-[tasks.test]
+[tasks.test-gradle]
 run = '''
-    mise run test-maven
+    bun run scripts/gradle.bun.ts test
 '''
 
-[tasks.test-maven]
+[tasks.test-bruno]
 run = '''
-    mvn test
+    cd .vscode/bruno-collections && bun i --no-save && bun run test-bruno.bun.ts
 '''
 
 [tasks.start]
-run = "mvn spring-boot:run"
+run = "bun run scripts/start.bun.ts"
