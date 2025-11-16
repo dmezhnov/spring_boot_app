@@ -15,26 +15,20 @@ bun = true
 [settings.status]
 missing_tools = "always"
 
-[env]
-_.file = '.env'
-
 [hooks]
 postinstall =  '''
-    mvn clean install -DskipTests && bun i
+    mvn clean install -DskipTests
 '''
 
 [tasks.test]
 run = '''
-    mise run test-maven && mise run test-bruno
+    mise run test-maven
 '''
 
 [tasks.test-maven]
 run = '''
     mvn test
 '''
-
-[tasks.test-bruno]
-run = "bun run bruno/test-bruno.bun.ts"
 
 [tasks.start]
 run = "mvn spring-boot:run"

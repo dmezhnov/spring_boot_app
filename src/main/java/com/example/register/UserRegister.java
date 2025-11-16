@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.register;
 
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Service for user operations
  */
 @Service
-public class UserService {
+public class UserRegister {
 
     private final AtomicLong idGenerator = new AtomicLong(1);
 

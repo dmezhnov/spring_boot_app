@@ -1,13 +1,15 @@
-package com.example.service;
+package com.example.register;
 
 import com.example.dto.ProductRequest;
 import com.example.dto.ProductResponse;
+import com.example.register.ProductRegister;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProductServiceTest {
+class ProductRegisterTest {
 
-    private final ProductService service = new ProductService();
+    private final ProductRegister service = new ProductRegister();
 
     @Test
     void createProductValid() {

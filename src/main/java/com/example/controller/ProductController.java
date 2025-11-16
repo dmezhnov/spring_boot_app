@@ -2,7 +2,8 @@ package com.example.controller;
 
 import com.example.dto.ProductRequest;
 import com.example.dto.ProductResponse;
-import com.example.service.ProductService;
+import com.example.register.ProductRegister;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private ProductRegister productService;
 
     /**
      * POST /api/products/create

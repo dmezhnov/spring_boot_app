@@ -58,11 +58,11 @@
                 <configuration>
                     <!-- Explicitly include Java sources and exclude colocated test files from the main compilation -->
                     <includes>
-                        <include>**/*.java</include>
+                        <include>**/main/**.java</include>
                     </includes>
-                    <excludes>
-                        <exclude>**/*.test.java</exclude>
-                    </excludes>
+                        <excludes>
+                            <exclude>**/*.test.java</exclude>
+                        </excludes>
                 </configuration>
             </plugin>
 

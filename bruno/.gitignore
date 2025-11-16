@@ -1,5 +1,0 @@
-*.bru.rest
-*.bru.rest.history
-*.bru.rest.log
-.env
-.env.local

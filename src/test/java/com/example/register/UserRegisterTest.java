@@ -1,13 +1,15 @@
-package com.example.service;
+package com.example.register;
 
 import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
+import com.example.register.UserRegister;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserServiceTest {
+class UserRegisterTest {
 
-    private final UserService service = new UserService();
+    private final UserRegister service = new UserRegister();
 
     @Test
     void processUserCreatesActive() {

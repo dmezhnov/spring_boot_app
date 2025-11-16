@@ -22,7 +22,7 @@ max_line_length = 200
 max_line_length = 90
 
 #ignore
-[{**/node_modules/**,**/build/**,**/.history/**}]
+[{**/node_modules/**,**/build/**,**/.history/**,**/target/**}]
 end_of_line = unset
 insert_final_newline = unset
 charset = unset
