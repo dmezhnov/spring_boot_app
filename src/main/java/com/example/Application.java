@@ -1,13 +1,8 @@
 package com.example;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
+/**
+ * Application interface for the Spring Boot application.
+ */
+public interface Application {
+    // Marker interface for the application entry point.
 }

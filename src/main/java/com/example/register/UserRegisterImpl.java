@@ -1,7 +1,7 @@
 package com.example.register;
 
-import com.example.dto.UserRequest;
-import com.example.dto.UserResponse;
+import com.example.dto.UserRequestImpl;
+import com.example.dto.UserResponseImpl;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
@@ -12,7 +12,7 @@ public class UserRegisterImpl implements UserRegister {
 	private final AtomicLong idGenerator = new AtomicLong(1);
 
 	@Override
-	public UserResponse processUser(UserRequest request) {
+	public UserResponseImpl processUser(UserRequestImpl request) {
 		if (request.name == null || request.name.isEmpty()) {
 			throw new IllegalArgumentException("Name is required");
 		}
@@ -20,7 +20,7 @@ public class UserRegisterImpl implements UserRegister {
 			throw new IllegalArgumentException("Age must be between 0 and 150");
 		}
 
-		return UserResponse.builder()
+		return UserResponseImpl.builder()
 				.id(idGenerator.getAndIncrement())
 				.name(request.name.toUpperCase())
 				.email(request.email)
@@ -31,7 +31,7 @@ public class UserRegisterImpl implements UserRegister {
 	}
 
 	@Override
-	public UserResponse validateUser(UserRequest request) {
+	public UserResponseImpl validateUser(UserRequestImpl request) {
 		if (request.name == null || request.name.isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty");
 		}
@@ -39,7 +39,7 @@ public class UserRegisterImpl implements UserRegister {
 			throw new IllegalArgumentException("Invalid email format");
 		}
 
-		return UserResponse.builder()
+		return UserResponseImpl.builder()
 				.id(idGenerator.getAndIncrement())
 				.name(request.name)
 				.email(request.email)

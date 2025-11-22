@@ -7,7 +7,7 @@ class ProductResponseTest {
 
     @Test
     void builderAndFields() {
-        ProductResponse r = ProductResponse.builder()
+        ProductResponseImpl r = ProductResponseImpl.builder()
                 .id(10L)
                 .title("X")
                 .description("Y")

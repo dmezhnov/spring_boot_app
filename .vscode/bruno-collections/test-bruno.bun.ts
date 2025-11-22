@@ -36,11 +36,25 @@ if (await checkServerHealth()) {
   serverWasRunning = true;
   console.log("Server is already running!");
 } else {
-  // Start Spring Boot server
-  console.log("Starting Spring Boot server...");
-  serverProcess = spawn(["mise", "start"], {
+  // Build and start Spring Boot server only for tests
+  console.log("Building Spring Boot application JAR...");
+  const buildProcess = spawn(["mise", "build", "bootJar"], {
     stdout: "inherit",
     stderr: "inherit",
+    cwd: "..",
+  });
+  await buildProcess.exited;
+  const buildExitCode = buildProcess.exitCode ?? 0;
+  if (buildExitCode !== 0) {
+    console.log("Build did not complete successfully");
+    process.exit(buildExitCode);
+  }
+
+  console.log("Starting Spring Boot server...");
+  serverProcess = spawn(["java", "-jar", "build/libs/spring-boot-app-1.0.0.jar"], {
+    stdout: "inherit",
+    stderr: "inherit",
+    cwd: "..",
   });
 
   // Wait for server to be ready

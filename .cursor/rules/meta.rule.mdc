@@ -6,5 +6,5 @@ alwaysApply: true
 
 # Rule files overview
 
-- `default` rules: apply to all projects (global defaults).
+- `default` rules: apply to all projects and environments (global defaults that must be followed everywhere, not only in this repository).
 - `project` rules: apply only to this specific project (project-scoped rules).

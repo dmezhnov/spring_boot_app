@@ -7,7 +7,7 @@ class UserRequestTest {
 
     @Test
     void builderAndGetters() {
-        UserRequest r = UserRequest.builder()
+        UserRequestImpl r = UserRequestImpl.builder()
                 .name("N")
                 .email("e@x.com")
                 .age(30)

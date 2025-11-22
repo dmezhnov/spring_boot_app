@@ -15,9 +15,6 @@ bun = true
 [settings.status]
 missing_tools = "always"
 
-[env]
-_.file = '.env'
-
 [hooks]
 postinstall =  '''
     mise build
@@ -35,7 +32,7 @@ run = '''
 
 [tasks.test]
 run = '''
-    mise run test-gradle
+    mise run test-gradle && mise run test-bruno
 '''
 
 [tasks.build]
@@ -46,6 +43,11 @@ run = '''
 [tasks.start]
 run = '''
     mise build bootJar && java -jar build/libs/spring-boot-app-1.0.0.jar
+'''
+
+[tasks.start-test]
+run = '''
+    mise build bootJar && (java -jar build/libs/spring-boot-app-1.0.0.jar || true)
 '''
 
 [tasks.lint]

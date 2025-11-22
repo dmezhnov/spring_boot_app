@@ -7,7 +7,7 @@ class ProductRequestTest {
 
     @Test
     void builderAndGetters() {
-        ProductRequest r = ProductRequest.builder()
+        ProductRequestImpl r = ProductRequestImpl.builder()
                 .title("T")
                 .description("D")
                 .price(1.5)

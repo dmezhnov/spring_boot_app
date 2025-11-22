@@ -1,18 +1,9 @@
 package com.example.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
 /**
- * Request DTO for product
+ * Interface for product request DTO.
+ * Implementations must expose data via public fields, not getters/setters.
  */
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ProductRequest {
-    public String title;
-    public String description;
-    public double price;
-    public int quantity;
+public interface ProductRequest {
+    // Marker interface for product request DTO.
 }

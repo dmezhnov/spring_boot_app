@@ -9,7 +9,7 @@ class UserResponseTest {
     @Test
     void builderAndFields() {
         LocalDateTime now = LocalDateTime.now();
-        UserResponse r = UserResponse.builder()
+        UserResponseImpl r = UserResponseImpl.builder()
                 .id(1L)
                 .name("U")
                 .email("u@example.com")

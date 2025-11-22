@@ -1,9 +1,9 @@
 package com.example.register;
 
-import com.example.dto.ProductRequest;
-import com.example.dto.ProductResponse;
+import com.example.dto.ProductRequestImpl;
+import com.example.dto.ProductResponseImpl;
 
 public interface ProductRegister {
-	ProductResponse createProduct(ProductRequest request);
-	ProductResponse applyDiscount(ProductRequest request, double discountPercent);
+	ProductResponseImpl createProduct(ProductRequestImpl request);
+	ProductResponseImpl applyDiscount(ProductRequestImpl request, double discountPercent);
 }

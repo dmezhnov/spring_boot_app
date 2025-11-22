@@ -1,9 +1,9 @@
 package com.example.register;
 
-import com.example.dto.UserRequest;
-import com.example.dto.UserResponse;
+import com.example.dto.UserRequestImpl;
+import com.example.dto.UserResponseImpl;
 
 public interface UserRegister {
-	UserResponse processUser(UserRequest request);
-	UserResponse validateUser(UserRequest request);
+	UserResponseImpl processUser(UserRequestImpl request);
+	UserResponseImpl validateUser(UserRequestImpl request);
 }

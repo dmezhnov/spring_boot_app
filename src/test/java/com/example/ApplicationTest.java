@@ -8,7 +8,7 @@ class ApplicationTest {
 
     @Test
     void applicationClassHasSpringBootApplication() {
-        Class<Application> cls = Application.class;
+        Class<ApplicationImpl> cls = ApplicationImpl.class;
         assertTrue(cls.isAnnotationPresent(SpringBootApplication.class));
     }
 }
