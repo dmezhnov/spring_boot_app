@@ -1,6 +1,5 @@
 [settings]
 windows_shim_mode = "symlink"
-asdf_compat = true
 yes = true
 experimental = true
 auto_install = true
@@ -8,6 +7,7 @@ exec_auto_install = true
 not_found_auto_install = true
 task_run_auto_install = true
 lockfile = true
+all_compile = false
 
 [settings.npm]
 bun = true
@@ -30,12 +30,12 @@ run = '''
 
 [tasks.test-bruno]
 run = '''
-    cd .vscode/bruno-collections && bun i --no-save && bun run test-bruno.bun.ts
+    cd .vscode/bruno-collections && mise i && bun run test-bruno.bun.ts
 '''
 
 [tasks.test]
 run = '''
-    mise run test-gradle && mise run test-bruno
+    mise run test-gradle
 '''
 
 [tasks.build]

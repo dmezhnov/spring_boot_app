@@ -1,0 +1,21 @@
+[settings]
+windows_shim_mode = "symlink"
+yes = true
+experimental = true
+auto_install = true
+exec_auto_install = true
+not_found_auto_install = true
+task_run_auto_install = true
+lockfile = true
+all_compile = false
+
+[settings.npm]
+bun = true
+
+[settings.status]
+missing_tools = "always"
+
+[hooks]
+postinstall =  '''
+    bun i --no-save
+'''
