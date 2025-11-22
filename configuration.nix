@@ -75,8 +75,9 @@ in
   services.desktopManager.plasma6.enable = true;
 
   services.xserver.xkb = {
-    layout = "us";
+    layout = "us,ru";
     variant = "";
+    xkbOptions = "grp:alt_shift_toggle";
   };
 
   services.printing.enable = true;

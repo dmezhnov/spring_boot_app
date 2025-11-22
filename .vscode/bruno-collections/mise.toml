@@ -15,7 +15,12 @@ bun = true
 [settings.status]
 missing_tools = "always"
 
-[hooks]
-postinstall =  '''
-    bun i --no-save
+[tasks.test-bruno]
+run = '''
+    mise run install && mise x bun -- bun run test-bruno.bun.ts
+'''
+
+[tasks.install]
+run = '''
+    mise x bun -- bun i --no-save
 '''

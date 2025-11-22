@@ -7,7 +7,7 @@ description: Enforce interface-first design with Impl suffix for implementations
 In this repository, every concrete implementation class must have a corresponding interface, and the implementation class must be named with the `Impl` suffix.
 
 - MUST:
-  - Define a public interface for each concrete class. The interface name is the base name, and the class name is `<InterfaceName>Impl`.
+  - Define a public interface for each concrete class in scope (services, repositories, helpers, utilities). Controllers are exempt from this requirement and MAY be implemented as concrete classes without a separate interface. The interface name is the base name, and the class name is `<InterfaceName>Impl`.
   - Place the interface in the same package as its implementation.
   - Annotate ONLY the implementation with framework/DI/web annotations (e.g., `@Service`, `@Component`, `@RestController`, `@RequestMapping`, `@Transactional`).
   - Inject and refer to beans by their interface type (constructor injection preferred).
@@ -17,8 +17,8 @@ In this repository, every concrete implementation class must have a correspondin
   - Name an implementation class anything other than `<InterfaceName>Impl`.
   - Put Spring MVC mapping annotations on interfaces; they belong on implementations.
 - SCOPE:
-  - Applies to controllers, services, repositories, helpers, and utilities.
-  - Exclusions: DTO/value objects (e.g., `com.example.dto`), records, enums, exceptions, the Spring Boot main class (`Application`), `@Configuration` classes, and test classes.
+  - Applies to services, repositories, helpers, and utilities.
+  - Exclusions: controllers (they MAY be implemented without interfaces), DTO/value objects (e.g., `com.example.dto`), records, enums, exceptions, the Spring Boot main class (`Application`), `@Configuration` classes, and test classes.
 - MIGRATION:
   - Rename existing classes to `<InterfaceName>Impl`, create the interface `<InterfaceName>`, and update injections/usages to the interface type.
   - If multiple implementations exist, use `@Qualifier` on injection points.
