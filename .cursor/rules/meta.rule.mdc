@@ -1,0 +1,10 @@
+---
+description: meta rule
+globs: []
+alwaysApply: true
+---
+
+# Rule files overview
+
+- `default` rules: apply to all projects (global defaults).
+- `project` rules: apply only to this specific project (project-scoped rules).

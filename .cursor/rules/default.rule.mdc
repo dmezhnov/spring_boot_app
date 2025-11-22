@@ -10,10 +10,12 @@ alwaysApply: true
 - Always reply to the human user in **Russian**, but think in English and write all code comments in **English**.
 - All AI-related rules/instructions in this repository must be written in English only.
 - Do not write comments or rules in any other language.
-- After any non-trivial change to the project configuration, run `mise run test` to ensure all scope tests and coverage tests still pass.
+- After any non-trivial change to the project configuration (excluding edits limited to `.cursor/rules/**`), run `mise run test` to ensure all scope tests and coverage tests still pass.
+- After any non-trivial change to the project configuration (including edits limited to `.cursor/rules/**`), run `mise run lint` (or the narrowest relevant variants) before finishing your response, and surface any failures clearly to the user.
 - After making code changes, run both `mise run test` and `mise run lint` (or the narrowest relevant variants) before finishing your response, and surface any failures clearly to the user.
 - When you need to install or update tools and dependencies, use `mise run install` (which is defined in `mise.toml` to install everything that is needed); if at some point it stops installing something important, update the `[tasks.install]` command in `mise.toml` instead of calling `bun install` or other raw package-manager commands directly, unless the user explicitly instructs otherwise.
 - When in doubt about project conventions (naming, structure, test layout), mirror the existing patterns in this repository rather than introducing new ones.
 - When the user asks to "add rules" (or similar wording about adding rules), interpret this as a request to edit the rule files under `.cursor/rules/`, unless they explicitly refer to some other config.
 - Treat command execution output conservatively: if there is any indication of an error, non-zero exit code, or failure notice, do not report that everything is OK or fully successful; instead, describe precisely what ran and what failed.
 - This policy applies to all new files and edits.
+- When summarizing command, test, or linter output, explicitly surface all warnings in a clearly marked **Warnings** section and format them with bold markers so they are easy to notice, including a brief explanation of each warning when possible.

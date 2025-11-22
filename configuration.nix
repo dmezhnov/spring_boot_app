@@ -66,7 +66,7 @@ in
       LC_NUMERIC = "kk_KZ.UTF-8";
       LC_PAPER = "kk_KZ.UTF-8";
       LC_TELEPHONE = "kk_KZ.UTF-8";
-      LC_TIME = "kk_KZ.UTF-8";
+      LC_TIME = "ru_RU.UTF-8";
     };
   };
 
@@ -77,7 +77,7 @@ in
   services.xserver.xkb = {
     layout = "us,ru";
     variant = "";
-    xkbOptions = "grp:alt_shift_toggle";
+    options = "grp:alt_shift_toggle";
   };
 
   services.printing.enable = true;
