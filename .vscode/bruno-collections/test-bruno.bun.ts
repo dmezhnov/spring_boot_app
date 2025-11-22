@@ -1,6 +1,8 @@
 #!/usr/bin/env bun
 
 import { spawn } from "bun";
+import { access } from "fs/promises";
+import { constants as fsConstants } from "fs";
 import { setTimeout } from "timers/promises";
 
 // Check if server is already running
@@ -50,11 +52,21 @@ if (await checkServerHealth()) {
     process.exit(buildExitCode);
   }
 
+  // Resolve absolute path to the Spring Boot JAR from this script location
+  const jarPath = new URL("../../build/libs/spring-boot-app-1.0.0.jar", import.meta.url).pathname;
+
+  // Ensure JAR file is accessible before trying to start it
+  try {
+    await access(jarPath, fsConstants.R_OK);
+  } catch {
+    console.error(`Error: Spring Boot JAR is not readable at path: ${jarPath}`);
+    process.exit(1);
+  }
+
   console.log("Starting Spring Boot server...");
-  serverProcess = spawn(["java", "-jar", "build/libs/spring-boot-app-1.0.0.jar"], {
+  serverProcess = spawn(["java", "-jar", jarPath], {
     stdout: "inherit",
     stderr: "inherit",
-    cwd: "..",
   });
 
   // Wait for server to be ready

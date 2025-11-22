@@ -4,7 +4,6 @@
         "foxundermoon.shell-format",
         "redhat.vscode-yaml",
         "github.vscode-github-actions",
-        "tamasfe.even-better-toml",
         "hverlin.mise-vscode",
         "dotenv.dotenv-vscode",
         "breadnaught.vscode-ignore",
@@ -13,10 +12,11 @@
         "editorconfig.editorconfig",
         "vscjava.vscode-java-pack",
         "zongou.vs-seti-firacodenerdfont",
-        "pkief.material-icon-theme",
         "pkief.material-product-icons",
         "fill-labs.dependi",
         "oven.bun-vscode",
-        "bruno-api-client.bruno"
+        "bruno-api-client.bruno",
+        "ms-azuretools.vscode-docker",
+        "tombi-toml.tombi"
     ]
 }
