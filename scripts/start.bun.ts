@@ -13,7 +13,7 @@ const stateFile = join(runDir, "state.env");
 const logFile = join(runDir, "app.log");
 const pidFile = join(runDir, "app.pid");
 const containerName = "spring-boot-app-postgres";
-const networkName = "spring_boot_app_default";
+const networkName = "configs_default";
 
 async function ensureDirs() {
   await mkdir(runDir, { recursive: true });
@@ -151,8 +151,8 @@ async function main() {
   const preNet = await networkExists(networkName);
   const upCmd =
     compose === "compose"
-      ? ["docker", "compose", "-f", "docker/docker-compose.yml", "up", "-d", "postgres"]
-      : ["docker-compose", "-f", "docker/docker-compose.yml", "up", "-d", "postgres"];
+      ? ["docker", "compose", "-f", "configs/docker-compose.yml", "up", "-d", "postgres"]
+      : ["docker-compose", "-f", "configs/docker-compose.yml", "up", "-d", "postgres"];
   const up = await run(upCmd);
   if (up.code !== 0) {
     console.error("Error: failed to start PostgreSQL via docker compose.");
