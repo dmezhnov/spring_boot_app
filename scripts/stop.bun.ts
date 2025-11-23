@@ -75,14 +75,27 @@ async function main() {
     await run(["docker", "network", "rm", networkName]).catch(() => {});
   }
 
-  // possible docker stop (only Linux, only if we started it and nothing else runs)
-  if (startedDocker && platform === "linux") {
+  // possible docker stop (cross-platform best-effort, only if we started it and nothing else runs)
+  if (startedDocker) {
     const ps = spawn(["docker", "ps", "-q"], { stdout: "pipe", stderr: "ignore" });
     const buf = await ps.stdout!.arrayBuffer();
     const alive = new TextDecoder().decode(buf).trim().length > 0;
     if (!alive) {
-      await run(["systemctl", "--user", "stop", "docker"]).catch(() => {});
-      await run(["systemctl", "stop", "docker"]).catch(() => {});
+      if (platform === "linux") {
+        await run(["systemctl", "--user", "stop", "docker"]).catch(() => {});
+        await run(["systemctl", "stop", "docker"]).catch(() => {});
+      } else if (platform === "darwin") {
+        // Try to quit Docker.app on macOS
+        await run(["osascript", "-e", 'quit app "Docker"']).catch(() => {});
+      } else if (platform === "win32") {
+        // Try to stop Docker Desktop on Windows
+        await run([
+          "powershell",
+          "-NoProfile",
+          "-Command",
+          "Get-Process 'Docker Desktop' -ErrorAction SilentlyContinue | Stop-Process -Force",
+        ]).catch(() => {});
+      }
     }
   }
 
@@ -91,5 +104,3 @@ async function main() {
 }
 
 await main();
-
-
