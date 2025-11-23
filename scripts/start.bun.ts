@@ -149,7 +149,10 @@ async function main() {
   // 4) start postgres
   const preStatus = await getContainerStatus(containerName);
   const preNet = await networkExists(networkName);
-  const upCmd = compose === "compose" ? ["docker", "compose", "up", "-d", "postgres"] : ["docker-compose", "up", "-d", "postgres"];
+  const upCmd =
+    compose === "compose"
+      ? ["docker", "compose", "-f", "docker/docker-compose.yml", "up", "-d", "postgres"]
+      : ["docker-compose", "-f", "docker/docker-compose.yml", "up", "-d", "postgres"];
   const up = await run(upCmd);
   if (up.code !== 0) {
     console.error("Error: failed to start PostgreSQL via docker compose.");
@@ -274,5 +277,3 @@ async function main() {
 }
 
 await main();
-
-

@@ -56,6 +56,11 @@ run = ""
 [tasks.format]
 run = ""
 
+[tasks.save]
+run = '''
+    mise x bun -- bun run scripts/save.bun.ts
+'''
+
 [tasks.install]
 run = '''
     mise install
