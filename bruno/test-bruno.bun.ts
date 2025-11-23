@@ -1,8 +1,7 @@
 #!/usr/bin/env bun
 
 import { spawn } from "bun";
-import { access } from "fs/promises";
-import { constants as fsConstants } from "fs";
+import { readdir } from "fs/promises";
 import { setTimeout } from "timers/promises";
 
 // Check if server is already running
@@ -52,14 +51,21 @@ if (await checkServerHealth()) {
     process.exit(buildExitCode);
   }
 
-  // Resolve absolute path to the Spring Boot JAR from this script location
-  const jarPath = new URL("../build/libs/spring-boot-app-1.0.0.jar", import.meta.url).pathname;
-
-  // Ensure JAR file is accessible before trying to start it
+  // Resolve absolute path to the Spring Boot JAR dynamically (avoid hardcoding version)
+  const libsDirUrl = new URL("../build/libs/", import.meta.url);
+  const libsDir = libsDirUrl.pathname;
+  let jarPath: string | undefined;
   try {
-    await access(jarPath, fsConstants.R_OK);
+    const files = await readdir(libsDir);
+    const jarName = files.find((f) => f.endsWith(".jar") && !f.endsWith("-plain.jar"));
+    if (jarName) {
+      jarPath = new URL(jarName, libsDirUrl).pathname;
+    }
   } catch {
-    console.error(`Error: Spring Boot JAR is not readable at path: ${jarPath}`);
+    jarPath = undefined;
+  }
+  if (!jarPath) {
+    console.error(`Error: no runnable Spring Boot JAR found in ${libsDir}.`);
     process.exit(1);
   }
 
