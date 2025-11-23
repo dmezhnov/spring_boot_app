@@ -320,17 +320,24 @@ export class StartScript {
   }
 
   private async checkServerHealth(): Promise<boolean> {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 2000);
-      const res = await fetch("http://localhost:8080/api/users/health", {
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-      return res.status === 200;
-    } catch {
-      return false;
+    const maxAttempts = 30;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 2000);
+        const res = await fetch("http://localhost:8080/api/users/health", {
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        if (res.status === 200) {
+          return true;
+        }
+      } catch {
+        // ignore and retry
+      }
+      await Bun.sleep(1000);
     }
+    return false;
   }
 
   private async isServerUp(): Promise<boolean> {

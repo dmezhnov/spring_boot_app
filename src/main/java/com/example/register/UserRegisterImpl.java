@@ -2,14 +2,25 @@ package com.example.register;
 
 import com.example.dto.UserRequestImpl;
 import com.example.dto.UserResponseImpl;
+import com.example.repository.UserRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class UserRegisterImpl implements UserRegister {
 
-	private final AtomicLong idGenerator = new AtomicLong(1);
+	private final UserRepositoryImpl userRepository;
+
+	@Autowired
+	public UserRegisterImpl(UserRepositoryImpl userRepository) {
+		this.userRepository = userRepository;
+	}
+
+	UserRegisterImpl() {
+		this.userRepository = null;
+	}
 
 	@Override
 	public UserResponseImpl processUser(UserRequestImpl request) {
@@ -20,14 +31,16 @@ public class UserRegisterImpl implements UserRegister {
 			throw new IllegalArgumentException("Age must be between 0 and 150");
 		}
 
-		return UserResponseImpl.builder()
-				.id(idGenerator.getAndIncrement())
+		UserResponseImpl response = UserResponseImpl.builder()
+				.id(null)
 				.name(request.name.toUpperCase())
 				.email(request.email)
 				.age(request.age)
 				.status("ACTIVE")
 				.createdAt(LocalDateTime.now())
 				.build();
+
+		return saveIfRepositoryPresent(response);
 	}
 
 	@Override
@@ -39,13 +52,22 @@ public class UserRegisterImpl implements UserRegister {
 			throw new IllegalArgumentException("Invalid email format");
 		}
 
-		return UserResponseImpl.builder()
-				.id(idGenerator.getAndIncrement())
+		UserResponseImpl response = UserResponseImpl.builder()
+				.id(null)
 				.name(request.name)
 				.email(request.email)
 				.age(request.age)
 				.status("VALIDATED")
 				.createdAt(LocalDateTime.now())
 				.build();
+
+		return saveIfRepositoryPresent(response);
+	}
+
+	private UserResponseImpl saveIfRepositoryPresent(UserResponseImpl response) {
+		if (userRepository != null) {
+			return userRepository.save(response);
+		}
+		return response;
 	}
 }

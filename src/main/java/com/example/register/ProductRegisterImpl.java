@@ -2,13 +2,23 @@ package com.example.register;
 
 import com.example.dto.ProductRequestImpl;
 import com.example.dto.ProductResponseImpl;
+import com.example.repository.ProductRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ProductRegisterImpl implements ProductRegister {
 
-	private final AtomicLong idGenerator = new AtomicLong(1000);
+	private final ProductRepositoryImpl productRepository;
+
+	@Autowired
+	public ProductRegisterImpl(ProductRepositoryImpl productRepository) {
+		this.productRepository = productRepository;
+	}
+
+	ProductRegisterImpl() {
+		this.productRepository = null;
+	}
 
 	@Override
 	public ProductResponseImpl createProduct(ProductRequestImpl request) {
@@ -22,8 +32,8 @@ public class ProductRegisterImpl implements ProductRegister {
 		double totalValue = request.price * request.quantity;
 		boolean available = request.quantity > 0;
 
-		return ProductResponseImpl.builder()
-				.id(idGenerator.getAndIncrement())
+		ProductResponseImpl response = ProductResponseImpl.builder()
+				.id(null)
 				.title(request.title)
 				.description(request.description)
 				.price(request.price)
@@ -32,6 +42,8 @@ public class ProductRegisterImpl implements ProductRegister {
 				.category("GENERAL")
 				.available(available)
 				.build();
+
+		return saveIfRepositoryPresent(response);
 	}
 
 	@Override
@@ -43,8 +55,8 @@ public class ProductRegisterImpl implements ProductRegister {
 		double discountedPrice = request.price * (1 - discountPercent / 100.0);
 		double totalValue = discountedPrice * request.quantity;
 
-		return ProductResponseImpl.builder()
-				.id(idGenerator.getAndIncrement())
+		ProductResponseImpl response = ProductResponseImpl.builder()
+				.id(null)
 				.title(request.title)
 				.description(request.description)
 				.price(discountedPrice)
@@ -53,5 +65,14 @@ public class ProductRegisterImpl implements ProductRegister {
 				.category("DISCOUNTED")
 				.available(request.quantity > 0)
 				.build();
+
+		return saveIfRepositoryPresent(response);
+	}
+
+	private ProductResponseImpl saveIfRepositoryPresent(ProductResponseImpl response) {
+		if (productRepository != null) {
+			return productRepository.save(response);
+		}
+		return response;
 	}
 }

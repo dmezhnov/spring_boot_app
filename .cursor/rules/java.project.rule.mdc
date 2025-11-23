@@ -1,0 +1,40 @@
+---
+description: Java-specific project rules (Liquibase and database usage)
+---
+
+## Liquibase-Managed Database Schema for Java Components
+
+In this repository, all persistent relational database schema changes used by Java code must be managed through Liquibase changelogs rather than ad-hoc SQL or implicit schema generation.
+
+- MUST:
+  - Define and evolve tables, columns, constraints, and indexes for relational databases (for example, PostgreSQL) exclusively via Liquibase changelog files under `src/main/resources/db/changelog/` (or explicitly documented subpaths).
+  - Keep Liquibase changelogs in version control and treat them as the single source of truth for the database schema used by the Java application.
+  - Add a new Liquibase changeset for every non-trivial schema change instead of modifying existing, already-applied changesets.
+- MUST NOT:
+  - Create, drop, or alter persistent database schema objects (tables, columns, constraints, indexes) from Java code, test fixtures, or unmanaged SQL scripts outside of Liquibase, except for clearly temporary, test-only schemas that are not shared with the main application database.
+  - Rely on ORM or framework features that auto-generate or mutate the schema at runtime (for example, JPA `hibernate.hbm2ddl.auto`), unless a dedicated rule explicitly allows this for a specific, isolated use case.
+- SCOPE:
+  - Applies to all Java code in this project and to any relational databases it uses (for example, PostgreSQL instances started via Docker) where the schema is expected to be stable and shared across environments.
+- MIGRATION:
+  - When introducing a new table or column required by Java code, first add an appropriate Liquibase changeset, then update the Java code to use the new schema element.
+  - When removing or changing schema elements, add corresponding Liquibase changesets that perform the migration safely (including data migration or backfills when necessary).
+- REVIEW GATE:
+  - Reject changes that modify the persistent database schema outside of Liquibase-managed changelogs.
+  - Request that schema changes be expressed as Liquibase changesets and wired into the application's Liquibase configuration before merging.
+
+## Database-Backed Tests for Java Components
+
+For Java components that read from or write to a relational database (for example, PostgreSQL), tests that verify their integration behavior must exercise real database interactions rather than only in-memory or mocked persistence.
+
+- MUST:
+  - Provide at least one test per database-writing or database-reading code path that uses a real database connection and the same Liquibase-managed schema as the application.
+  - Verify both the returned values from the Java methods and the actual state of the database (for example, inserted or updated rows) using SQL queries or repository-level reads.
+  - Ensure that tests clean up or isolate their data (for example, by truncating or deleting from relevant tables) so they can be run repeatedly and independently.
+- MUST NOT:
+  - Rely solely on mocks or stubs for persistence in tests of components whose primary responsibility includes database access, when those tests are intended to validate integration behavior.
+  - Modify database schema from tests directly; tests may insert, update, or delete data (DML), but all schema changes must still go through Liquibase.
+- SCOPE:
+  - Applies to all Java tests that cover components using `JdbcTemplate`, ORM repositories, or other direct database access for application logic.
+- REVIEW GATE:
+  - Reject changes that introduce new database-dependent logic without accompanying tests that hit a real database and assert on the resulting database state.
+

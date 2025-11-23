@@ -3,7 +3,9 @@ package com.example.controller;
 import com.example.dto.UserRequestImpl;
 import com.example.dto.UserResponseImpl;
 import com.example.register.UserRegisterImpl;
+import com.example.repository.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ public class UserController {
 
 	@Autowired
 	private UserRegisterImpl userService;
+
+	@Autowired
+	private UserRepositoryImpl userRepository;
 
 	@PostMapping("/process")
 	public ResponseEntity<UserResponseImpl> processUser(@RequestBody UserRequestImpl request) {
@@ -48,5 +53,18 @@ public class UserController {
 	@GetMapping("/health")
 	public ResponseEntity<String> health() {
 		return ResponseEntity.ok("User service is healthy");
+	}
+
+	@GetMapping("/by-email")
+	public ResponseEntity<UserResponseImpl> getByEmail(@RequestParam String email) {
+		if (email == null || email.isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
+		try {
+			UserResponseImpl response = userRepository.findByEmail(email);
+			return ResponseEntity.ok(response);
+		} catch (EmptyResultDataAccessException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 }
