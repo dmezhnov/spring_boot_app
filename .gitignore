@@ -22,4 +22,3 @@ target/
 **.venv
 **/__pypackages__
 **/.pdm-build
-configuration.nix

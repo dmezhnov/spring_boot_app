@@ -53,7 +53,7 @@ if (await checkServerHealth()) {
   }
 
   // Resolve absolute path to the Spring Boot JAR from this script location
-  const jarPath = new URL("../../build/libs/spring-boot-app-1.0.0.jar", import.meta.url).pathname;
+  const jarPath = new URL("../build/libs/spring-boot-app-1.0.0.jar", import.meta.url).pathname;
 
   // Ensure JAR file is accessible before trying to start it
   try {

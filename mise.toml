@@ -27,12 +27,12 @@ run = '''
 
 [tasks.test-bruno]
 run = '''
-    cd .vscode/bruno-collections && mise run test-bruno
+    cd bruno && mise run test-bruno
 '''
 
 [tasks.test]
 run = '''
-    mise run test-gradle && mise run test-bruno
+    mise x bun -- bun run scripts/test.bun.ts
 '''
 
 [tasks.build]
@@ -42,107 +42,12 @@ run = '''
 
 [tasks.start]
 run = '''
-    # 1. Check that docker CLI is installed
-    if ! command -v docker >/dev/null 2>&1; then
-      echo "Error: docker is not installed or not in PATH." >&2
-      exit 1
-    fi
-
-    # 2. Ensure docker daemon is running (try to start if not)
-    if ! docker info >/dev/null 2>&1; then
-      echo "Docker daemon does not appear to be running, attempting to start it..." >&2
-
-      if command -v systemctl >/dev/null 2>&1; then
-        # Try user service first, then system service (ignore failures, they will be caught below)
-        systemctl --user start docker >/dev/null 2>&1 || systemctl start docker >/dev/null 2>&1 || true
-      fi
-
-      # Wait for docker to become available (up to 30 seconds)
-      ATTEMPTS=30
-      i=0
-      while ! docker info >/dev/null 2>&1; do
-        i=$((i+1))
-        if [ "$i" -ge "$ATTEMPTS" ]; then
-          echo "Error: docker daemon failed to start or is not reachable." >&2
-          exit 1
-        fi
-        sleep 1
-      done
-    fi
-
-    # 3. Determine docker compose command
-    if docker compose version >/dev/null 2>&1; then
-      COMPOSE_CMD="docker compose"
-    elif command -v docker-compose >/dev/null 2>&1; then
-      COMPOSE_CMD="docker-compose"
-    else
-      echo "Error: docker compose is not available (neither 'docker compose' nor 'docker-compose')." >&2
-      exit 1
-    fi
-
-    # 4. Start PostgreSQL via docker compose
-    if ! $COMPOSE_CMD up -d postgres; then
-      echo "Error: failed to start PostgreSQL via docker compose." >&2
-      exit 1
-    fi
-
-    # 5. Wait for PostgreSQL container to be running and (if healthcheck exists) healthy
-    ATTEMPTS=30
-    i=0
-    while true; do
-      STATUS=$(docker inspect spring-boot-app-postgres 2>/dev/null | grep '"Status":' | head -n1 | sed -E 's/.*"Status":[[:space:]]*"([^"]+)".*/\1/' || true)
-      if [ -z "$STATUS" ]; then
-        STATUS="unknown"
-      fi
-
-      HEALTH=$(docker inspect spring-boot-app-postgres 2>/dev/null | grep -A 5 '"Health"' | grep '"Status":' | head -n1 | sed -E 's/.*"Status":[[:space:]]*"([^"]+)".*/\1/' || true)
-
-      if [ "$STATUS" = "running" ]; then
-        if [ -z "$HEALTH" ] || [ "$HEALTH" = "healthy" ]; then
-          break
-        fi
-      fi
-
-      if [ "$STATUS" = "exited" ] || [ "$STATUS" = "dead" ]; then
-        echo "Error: PostgreSQL container 'spring-boot-app-postgres' exited or failed to start (status: $STATUS, health: $HEALTH)." >&2
-        exit 1
-      fi
-
-      i=$((i+1))
-      if [ "$i" -ge "$ATTEMPTS" ]; then
-        echo "Error: PostgreSQL container 'spring-boot-app-postgres' did not become healthy in time (status: $STATUS, health: $HEALTH)." >&2
-        exit 1
-      fi
-
-      sleep 1
-    done
-
-    # 6. Build and run Spring Boot application
-    if ! mise build bootJar; then
-      echo "Error: failed to build Spring Boot application (bootJar)." >&2
-      exit 1
-    fi
-
-    java -jar build/libs/spring-boot-app-1.0.0.jar
-'''
-
-[tasks.start-test]
-run = '''
-    if docker compose version >/dev/null 2>&1; then
-      docker compose up -d postgres
-    else
-      docker-compose up -d postgres
-    fi
-    mise build bootJar && (java -jar build/libs/spring-boot-app-1.0.0.jar || true)
+    mise x bun -- bun run scripts/start.bun.ts
 '''
 
 [tasks.stop]
 run = '''
-    if docker compose version >/dev/null 2>&1; then
-      docker compose down
-    else
-      docker-compose down
-    fi
+    mise x bun -- bun run scripts/stop.bun.ts
 '''
 
 [tasks.lint]
