@@ -5,7 +5,16 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
- * Implementation for user request DTO.
+ * Implementation for user request DTO using public fields and Lombok builder.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRequestImpl request = UserRequestImpl.builder()
+ *     .name("Alice")
+ *     .email("alice@example.com")
+ *     .age(30)
+ *     .build();
+ * }
  */
 @NoArgsConstructor
 @AllArgsConstructor

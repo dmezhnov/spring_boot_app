@@ -166,7 +166,7 @@ export class StartScript {
     const logHandle = await Bun.file(this.logFile).writer();
     let app;
     try {
-      app = spawn(["mise", "x", "java", "--", "java", "-jar", jarRelPath], {
+      app = spawn(["java", "-jar", jarRelPath], {
         cwd: this.projectRoot,
         stdout: "pipe",
         stderr: "pipe",

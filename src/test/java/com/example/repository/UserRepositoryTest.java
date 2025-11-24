@@ -16,6 +16,16 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+/**
+ * Integration tests for {@link UserRepositoryImpl} using a PostgreSQL database and Liquibase migrations.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRepositoryTest test = new UserRepositoryTest();
+ * test.setUp();
+ * test.saveAndFindByEmailPersistAndLoadUser();
+ * }
+ */
 public class UserRepositoryTest {
 
     private JdbcTemplate jdbcTemplate;

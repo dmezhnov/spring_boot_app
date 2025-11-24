@@ -18,6 +18,16 @@ import static org.testng.Assert.*;
 
 import java.util.Objects;
 
+/**
+ * Integration tests for {@link ProductRegisterImpl} that verify product creation and discount application flows.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRegisterTest test = new ProductRegisterTest();
+ * test.setUp();
+ * test.createProductValid();
+ * }
+ */
 public class ProductRegisterTest {
 
     private JdbcTemplate jdbcTemplate;

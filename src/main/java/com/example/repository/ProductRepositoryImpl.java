@@ -7,7 +7,14 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 
 /**
- * JDBC-based implementation of ProductRepository using Spring JdbcTemplate.
+ * JDBC-based implementation of {@link ProductRepository} using Spring {@link JdbcTemplate}.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRepository repository = new ProductRepositoryImpl(jdbcTemplate);
+ * ProductResponseImpl saved = repository.save(product);
+ * ProductResponseImpl loaded = repository.findByTitle("Phone");
+ * }
  */
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {

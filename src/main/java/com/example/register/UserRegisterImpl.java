@@ -8,6 +8,15 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * Service implementation of {@link UserRegister} that validates and transforms user data and persists it if a repository is available.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRegister register = new UserRegisterImpl(userRepository);
+ * UserResponseImpl response = register.processUser(request);
+ * }
+ */
 @Service
 public class UserRegisterImpl implements UserRegister {
 

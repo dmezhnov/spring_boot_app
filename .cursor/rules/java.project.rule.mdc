@@ -27,6 +27,10 @@ alwaysApply: true
 
 - All Java code in this project (both production and test sources) must follow SOLID design principles. For the Dependency Inversion Principle (DIP), interpret this as a clear separation between contracts (interfaces) and implementations, while still allowing application code to depend on `<InterfaceName>Impl` implementation types in accordance with the Java Interface + Impl Naming Rule.
 
+## Javadoc for Java classes
+
+- Every Java class and interface in this project (including production and test sources) must have a class-level Javadoc comment that briefly describes its purpose and includes at least one small usage example as a `{@code ...}` block.
+
 ## Tests after configuration changes (non-rules)
 
 - After any non-trivial change to the project configuration (excluding edits limited to `.cursor/rules/**`), run `mise run test` to ensure all scope tests and coverage tests still pass.

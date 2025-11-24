@@ -1,7 +1,9 @@
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 export class RunEnv {
-  private static readonly libDir = dirname(new URL(import.meta.url).pathname);
+  private static readonly libFile = fileURLToPath(import.meta.url);
+  private static readonly libDir = dirname(RunEnv.libFile);
   private static readonly scriptsDir = dirname(RunEnv.libDir);
 
   static readonly projectRoot = dirname(RunEnv.scriptsDir);

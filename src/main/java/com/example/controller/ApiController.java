@@ -5,6 +5,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * REST controller exposing generic utility endpoints such as welcome, echo, info and transform.
+ *
+ * <p>Usage example:
+ * {@code
+ * ResponseEntity<Map<String, Object>> response = apiController.welcome();
+ * }
+ */
 @RestController
 @RequestMapping("/api")
 public class ApiController {

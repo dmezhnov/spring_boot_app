@@ -8,7 +8,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * JDBC-based implementation of UserRepository using Spring JdbcTemplate.
+ * JDBC-based implementation of {@link UserRepository} using Spring {@link JdbcTemplate}.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRepository repository = new UserRepositoryImpl(jdbcTemplate);
+ * UserResponseImpl saved = repository.save(user);
+ * UserResponseImpl loaded = repository.findByEmail(\"user@example.com\");
+ * }
  */
 @Repository
 public class UserRepositoryImpl implements UserRepository {

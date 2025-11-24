@@ -39,7 +39,7 @@ if (await checkServerHealth()) {
 } else {
   // Build and start Spring Boot server only for tests
   console.log("Building Spring Boot application JAR...");
-  const buildProcess = spawn(["mise", "build", "bootJar"], {
+  const buildProcess = spawn(["gradle", "build", "bootJar"], {
     stdout: "inherit",
     stderr: "inherit",
     cwd: "..",

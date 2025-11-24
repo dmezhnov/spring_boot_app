@@ -17,6 +17,16 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+/**
+ * Integration tests for {@link ProductRepositoryImpl} using a PostgreSQL database and Liquibase migrations.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRepositoryTest test = new ProductRepositoryTest();
+ * test.setUp();
+ * test.saveAndFindByTitlePersistAndLoadProduct();
+ * }
+ */
 public class ProductRepositoryTest {
 
     private JdbcTemplate jdbcTemplate;

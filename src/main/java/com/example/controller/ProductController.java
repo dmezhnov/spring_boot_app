@@ -10,6 +10,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for product operations such as creation, discount application and statistics.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRequestImpl request = ProductRequestImpl.builder()
+ *     .title("Phone")
+ *     .price(100.0)
+ *     .quantity(2)
+ *     .build();
+ * ResponseEntity<ProductResponseImpl> response = productController.createProduct(request);
+ * }
+ */
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {

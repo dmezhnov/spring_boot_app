@@ -6,6 +6,15 @@ import com.example.repository.ProductRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service implementation of {@link ProductRegister} that builds product responses and persists them if a repository is available.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRegister register = new ProductRegisterImpl(productRepository);
+ * ProductResponseImpl response = register.createProduct(request);
+ * }
+ */
 @Service
 public class ProductRegisterImpl implements ProductRegister {
 
@@ -37,7 +46,7 @@ public class ProductRegisterImpl implements ProductRegister {
 				.title(request.title)
 				.description(request.description)
 				.price(request.price)
-				.quantity(request.quantity)
+				quantity(request.quantity)
 				.totalValue(totalValue)
 				.category("GENERAL")
 				.available(available)

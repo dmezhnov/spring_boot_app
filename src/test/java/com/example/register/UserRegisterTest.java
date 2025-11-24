@@ -18,6 +18,16 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import java.util.Objects;
 
+/**
+ * Integration tests for {@link UserRegisterImpl} that verify processing and validation of users.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRegisterTest test = new UserRegisterTest();
+ * test.setUp();
+ * test.processUserCreatesActive();
+ * }
+ */
 public class UserRegisterTest {
 
     private JdbcTemplate jdbcTemplate;

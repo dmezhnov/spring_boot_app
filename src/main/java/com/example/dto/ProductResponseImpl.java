@@ -5,7 +5,21 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
- * Implementation for product response DTO.
+ * Implementation for product response DTO using public fields and Lombok builder.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductResponseImpl response = ProductResponseImpl.builder()
+ *     .id(1L)
+ *     .title("Phone")
+ *     .description("Smartphone")
+ *     .price(100.0)
+ *     .quantity(2)
+ *     .totalValue(200.0)
+ *     .category("GENERAL")
+ *     .available(true)
+ *     .build();
+ * }
  */
 @NoArgsConstructor
 @AllArgsConstructor

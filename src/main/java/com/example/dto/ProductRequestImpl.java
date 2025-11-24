@@ -5,7 +5,17 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
- * Implementation for product request DTO.
+ * Implementation for product request DTO using public fields and Lombok builder.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRequestImpl request = ProductRequestImpl.builder()
+ *     .title("Phone")
+ *     .description("Smartphone")
+ *     .price(100.0)
+ *     .quantity(2)
+ *     .build();
+ * }
  */
 @NoArgsConstructor
 @AllArgsConstructor

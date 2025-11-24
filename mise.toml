@@ -27,21 +27,7 @@ flag "--bruno" help="Run only Bruno API tests"
 flag "--full" help="Run full test suite (Gradle + Bruno)"
 '''
 run = '''
-    BRUNO="${usage_bruno:-false}"
-    FULL="${usage_full:-false}"
-
-    TEST_RUN_GRADLE="true"
-    TEST_RUN_BRUNO="false"
-
-    if [ "$BRUNO" = "true" ] && [ "$FULL" != "true" ]; then
-      TEST_RUN_GRADLE="false"
-      TEST_RUN_BRUNO="true"
-    elif [ "$FULL" = "true" ]; then
-      TEST_RUN_GRADLE="true"
-      TEST_RUN_BRUNO="true"
-    fi
-
-    TEST_RUN_GRADLE="$TEST_RUN_GRADLE" TEST_RUN_BRUNO="$TEST_RUN_BRUNO" mise x bun -- bun run scripts/test.bun.ts
+    mise x bun -- bun run scripts/test.bun.ts
 '''
 
 [tasks.build]
@@ -76,3 +62,6 @@ run = '''
 run = '''
     mise install
 '''
+
+[env]
+MISE_HTTP_TIMEOUT="300000"

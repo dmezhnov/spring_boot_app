@@ -4,6 +4,12 @@ import com.example.dto.ProductResponseImpl;
 
 /**
  * Repository contract for persisting products.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductResponseImpl saved = productRepository.save(product);
+ * ProductResponseImpl loaded = productRepository.findByTitle("Phone");
+ * }
  */
 public interface ProductRepository {
 

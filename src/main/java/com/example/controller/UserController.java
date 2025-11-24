@@ -10,6 +10,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for basic user operations such as processing, validation and registration.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRequestImpl request = UserRequestImpl.builder()
+ *     .name("Alice")
+ *     .email("alice@example.com")
+ *     .age(30)
+ *     .build();
+ * ResponseEntity<UserResponseImpl> response = userController.registerUser(request);
+ * }
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

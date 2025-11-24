@@ -6,7 +6,19 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Implementation for user response DTO.
+ * Implementation for user response DTO using public fields and Lombok builder.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserResponseImpl response = UserResponseImpl.builder()
+ *     .id(1L)
+ *     .name("Alice")
+ *     .email("alice@example.com")
+ *     .age(30)
+ *     .status("ACTIVE")
+ *     .createdAt(LocalDateTime.now())
+ *     .build();
+ * }
  */
 @NoArgsConstructor
 @AllArgsConstructor

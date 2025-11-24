@@ -4,6 +4,15 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import java.time.LocalDateTime;
 
+/**
+ * Tests for {@link UserResponseImpl} builder and public fields.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserResponseTest test = new UserResponseTest();
+ * test.builderAndFields();
+ * }
+ */
 class UserResponseTest {
 
     @Test
