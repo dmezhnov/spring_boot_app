@@ -157,3 +157,9 @@ alwaysApply: true
 ## Extracting non-trivial logic into functions
 
 - For all project code, non-trivial logic must be extracted into dedicated functions or methods instead of being implemented inline inside other functions or blocks. Nested function or method definitions inside other function bodies are only allowed for very small callbacks or lambdas; reusable or multi-step logic must live in named functions or methods at the appropriate module or class level.
+
+## Consistency between code, documentation, and behavior
+
+- Descriptions, comments, names (including variable, method, class, and endpoint names), configuration keys, and tests in this repository must accurately reflect the actual behavior, contracts, and data structures implemented in the codebase; they must not describe functionality, fields, or semantics that do not exist, and must be updated together with any behavior change.
+- README files and other documentation must be kept in sync with the implemented public-facing APIs (such as REST endpoints, DTO structures, and observable behavior of scripts and tasks), so that external callers can rely on them as accurate contracts.
+- When changing behavior, data shapes, or interfaces (for example, modifying a REST endpoint, DTO field set, or repository contract), the corresponding comments, tests, and documentation that describe this behavior must be reviewed and updated in the same change set to maintain consistency.

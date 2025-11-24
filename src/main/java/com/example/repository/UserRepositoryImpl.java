@@ -31,6 +31,11 @@ public class UserRepositoryImpl implements UserRepository {
         String sql = """
                 INSERT INTO users (name, email, age, status, created_at)
                 VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT (email) DO UPDATE
+                SET name = EXCLUDED.name,
+                    age = EXCLUDED.age,
+                    status = EXCLUDED.status,
+                    created_at = EXCLUDED.created_at
                 RETURNING id
                 """;
 

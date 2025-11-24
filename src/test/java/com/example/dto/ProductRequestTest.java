@@ -6,7 +6,7 @@ import static org.testng.Assert.*;
 class ProductRequestTest {
 
     @Test
-    void builderAndGetters() {
+    void builderAndFields() {
         ProductRequestImpl r = ProductRequestImpl.builder()
                 .title("T")
                 .description("D")

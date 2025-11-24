@@ -6,7 +6,7 @@ import static org.testng.Assert.*;
 class UserRequestTest {
 
     @Test
-    void builderAndGetters() {
+    void builderAndFields() {
         UserRequestImpl r = UserRequestImpl.builder()
                 .name("N")
                 .email("e@x.com")
