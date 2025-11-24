@@ -41,16 +41,16 @@ public class ProductRegisterImpl implements ProductRegister {
 		double totalValue = request.price * request.quantity;
 		boolean available = request.quantity > 0;
 
-		ProductResponseImpl response = ProductResponseImpl.builder()
-				.id(null)
-				.title(request.title)
-				.description(request.description)
-				.price(request.price)
-				quantity(request.quantity)
-				.totalValue(totalValue)
-				.category("GENERAL")
-				.available(available)
-				.build();
+		ProductResponseImpl response = new ProductResponseImpl(
+				null,
+				request.title,
+				request.description,
+				request.price,
+				request.quantity,
+				totalValue,
+				"GENERAL",
+				available
+		);
 
 		return saveIfRepositoryPresent(response);
 	}
@@ -64,16 +64,16 @@ public class ProductRegisterImpl implements ProductRegister {
 		double discountedPrice = request.price * (1 - discountPercent / 100.0);
 		double totalValue = discountedPrice * request.quantity;
 
-		ProductResponseImpl response = ProductResponseImpl.builder()
-				.id(null)
-				.title(request.title)
-				.description(request.description)
-				.price(discountedPrice)
-				.quantity(request.quantity)
-				.totalValue(totalValue)
-				.category("DISCOUNTED")
-				.available(request.quantity > 0)
-				.build();
+		ProductResponseImpl response = new ProductResponseImpl(
+				null,
+				request.title,
+				request.description,
+				discountedPrice,
+				request.quantity,
+				totalValue,
+				"DISCOUNTED",
+				request.quantity > 0
+		);
 
 		return saveIfRepositoryPresent(response);
 	}
