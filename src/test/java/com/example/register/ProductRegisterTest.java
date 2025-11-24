@@ -4,20 +4,19 @@ import com.example.dto.ProductRequestImpl;
 import com.example.dto.ProductResponseImpl;
 
 import com.example.repository.ProductRepositoryImpl;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
+
+import java.util.Objects;
 
 public class ProductRegisterTest {
 
@@ -48,12 +47,13 @@ public class ProductRegisterTest {
         try (var connection = dataSource.getConnection()) {
             Database database = DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Liquibase liquibase = new Liquibase(
+            try (Liquibase liquibase = new Liquibase(
                     "db/changelog/db.changelog-master.yaml",
                     new ClassLoaderResourceAccessor(),
                     database
-            );
-            liquibase.update();
+            )) {
+                liquibase.update();
+            }
         } catch (Exception e) {
             throw new IllegalStateException("Failed to run Liquibase migrations for ProductRegisterTest", e);
         }
@@ -73,16 +73,29 @@ public class ProductRegisterTest {
         assertTrue(resp.available);
         assertEquals(resp.totalValue, 600.0, 1e-6);
 
-        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM products", Long.class);
-        assertNotNull(count);
+        Long count = Objects.requireNonNull(
+                jdbcTemplate.queryForObject("SELECT COUNT(*) FROM products", Long.class),
+                "Expected non-null products count from database"
+        );
         assertEquals(count.longValue(), 1L);
 
-        ProductResponseImpl fromDb = jdbcTemplate.queryForObject(
-                "SELECT id, title, description, price, quantity, total_value, category, available FROM products WHERE title = ?",
-                productRowMapper(),
-                "Phone"
+        ProductResponseImpl fromDb = Objects.requireNonNull(
+                jdbcTemplate.queryForObject(
+                        "SELECT id, title, description, price, quantity, total_value, category, available FROM products WHERE title = ?",
+                        (rs, rowNum) -> ProductResponseImpl.builder()
+                                .id(rs.getLong("id"))
+                                .title(rs.getString("title"))
+                                .description(rs.getString("description"))
+                                .price(rs.getBigDecimal("price").doubleValue())
+                                .quantity(rs.getInt("quantity"))
+                                .totalValue(rs.getBigDecimal("total_value").doubleValue())
+                                .category(rs.getString("category"))
+                                .available(rs.getBoolean("available"))
+                                .build(),
+                        "Phone"
+                ),
+                "Expected non-null product from database"
         );
-        assertNotNull(fromDb);
         assertEquals(fromDb.title, "Phone");
         assertEquals(fromDb.description, "Smartphone");
         assertEquals(fromDb.price, 300.0, 1e-6);
@@ -105,16 +118,29 @@ public class ProductRegisterTest {
         assertEquals(resp.category, "DISCOUNTED");
         assertEquals(resp.price, 90.0, 1e-6);
 
-        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM products", Long.class);
-        assertNotNull(count);
+        Long count = Objects.requireNonNull(
+                jdbcTemplate.queryForObject("SELECT COUNT(*) FROM products", Long.class),
+                "Expected non-null products count from database"
+        );
         assertEquals(count.longValue(), 1L);
 
-        ProductResponseImpl fromDb = jdbcTemplate.queryForObject(
-                "SELECT id, title, description, price, quantity, total_value, category, available FROM products WHERE title = ?",
-                productRowMapper(),
-                "Item"
+        ProductResponseImpl fromDb = Objects.requireNonNull(
+                jdbcTemplate.queryForObject(
+                        "SELECT id, title, description, price, quantity, total_value, category, available FROM products WHERE title = ?",
+                        (rs, rowNum) -> ProductResponseImpl.builder()
+                                .id(rs.getLong("id"))
+                                .title(rs.getString("title"))
+                                .description(rs.getString("description"))
+                                .price(rs.getBigDecimal("price").doubleValue())
+                                .quantity(rs.getInt("quantity"))
+                                .totalValue(rs.getBigDecimal("total_value").doubleValue())
+                                .category(rs.getString("category"))
+                                .available(rs.getBoolean("available"))
+                                .build(),
+                        "Item"
+                ),
+                "Expected non-null product from database"
         );
-        assertNotNull(fromDb);
         assertEquals(fromDb.title, "Item");
         assertEquals(fromDb.description, "");
         assertEquals(fromDb.price, 90.0, 1e-6);
@@ -122,18 +148,5 @@ public class ProductRegisterTest {
         assertEquals(fromDb.totalValue, 270.0, 1e-6);
         assertEquals(fromDb.category, "DISCOUNTED");
         assertTrue(fromDb.available);
-    }
-
-    private RowMapper<ProductResponseImpl> productRowMapper() {
-        return (rs, rowNum) -> ProductResponseImpl.builder()
-                .id(rs.getLong("id"))
-                .title(rs.getString("title"))
-                .description(rs.getString("description"))
-                .price(rs.getBigDecimal("price").doubleValue())
-                .quantity(rs.getInt("quantity"))
-                .totalValue(rs.getBigDecimal("total_value").doubleValue())
-                .category(rs.getString("category"))
-                .available(rs.getBoolean("available"))
-                .build();
     }
 }

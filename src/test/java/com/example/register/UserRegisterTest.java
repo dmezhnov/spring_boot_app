@@ -4,8 +4,6 @@ import com.example.dto.UserRequestImpl;
 import com.example.dto.UserResponseImpl;
 
 import com.example.repository.UserRepositoryImpl;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -18,6 +16,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
+import java.util.Objects;
 
 public class UserRegisterTest {
 
@@ -48,12 +47,13 @@ public class UserRegisterTest {
         try (var connection = dataSource.getConnection()) {
             Database database = DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Liquibase liquibase = new Liquibase(
+            try (Liquibase liquibase = new Liquibase(
                     "db/changelog/db.changelog-master.yaml",
                     new ClassLoaderResourceAccessor(),
                     database
-            );
-            liquibase.update();
+            )) {
+                liquibase.update();
+            }
         } catch (Exception e) {
             throw new IllegalStateException("Failed to run Liquibase migrations for UserRegisterTest", e);
         }
@@ -72,16 +72,19 @@ public class UserRegisterTest {
         assertEquals(resp.status, "ACTIVE");
         assertEquals(resp.age, 28);
 
-        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Long.class);
-        assertNotNull(count);
-        assertEquals(count.longValue(), 1L);
+        long count = Objects.requireNonNull(
+                jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Long.class)
+        ).longValue();
+        assertEquals(count, 1L);
 
-        UserResponseImpl fromDb = jdbcTemplate.queryForObject(
-                "SELECT id, name, email, age, status, created_at FROM users WHERE email = ?",
-                userRowMapper(),
-                "alice@example.com"
+        UserResponseImpl fromDb = Objects.requireNonNull(
+                jdbcTemplate.queryForObject(
+                        "SELECT id, name, email, age, status, created_at FROM users WHERE email = ?",
+                        Objects.requireNonNull(userRowMapper()),
+                        "alice@example.com"
+                ),
+                "Expected user 'alice@example.com' to be present in users table"
         );
-        assertNotNull(fromDb);
         assertEquals(fromDb.name, "ALICE");
         assertEquals(fromDb.email, "alice@example.com");
         assertEquals(fromDb.age, 28);
@@ -99,16 +102,19 @@ public class UserRegisterTest {
         UserResponseImpl resp = service.validateUser(req);
         assertEquals(resp.status, "VALIDATED");
 
-        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Long.class);
-        assertNotNull(count);
-        assertEquals(count.longValue(), 1L);
+        long count = Objects.requireNonNull(
+                jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Long.class)
+        ).longValue();
+        assertEquals(count, 1L);
 
-        UserResponseImpl fromDb = jdbcTemplate.queryForObject(
-                "SELECT id, name, email, age, status, created_at FROM users WHERE email = ?",
-                userRowMapper(),
-                "bob@example.com"
+        UserResponseImpl fromDb = Objects.requireNonNull(
+                jdbcTemplate.queryForObject(
+                        "SELECT id, name, email, age, status, created_at FROM users WHERE email = ?",
+                        Objects.requireNonNull(userRowMapper()),
+                        "bob@example.com"
+                ),
+                "Expected user 'bob@example.com' to be present in users table"
         );
-        assertNotNull(fromDb);
         assertEquals(fromDb.name, "Bob");
         assertEquals(fromDb.email, "bob@example.com");
         assertEquals(fromDb.age, 40);

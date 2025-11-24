@@ -45,10 +45,6 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.available
         );
 
-        if (generatedId == null) {
-            throw new IllegalStateException("Failed to generate product ID");
-        }
-
         product.id = generatedId;
         return product;
     }

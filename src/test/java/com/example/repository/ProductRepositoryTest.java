@@ -2,8 +2,6 @@ package com.example.repository;
 
 import com.example.dto.ProductRequestImpl;
 import com.example.dto.ProductResponseImpl;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -48,12 +46,13 @@ public class ProductRepositoryTest {
         try (var connection = dataSource.getConnection()) {
             Database database = DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Liquibase liquibase = new Liquibase(
+            try (Liquibase liquibase = new Liquibase(
                     "db/changelog/db.changelog-master.yaml",
                     new ClassLoaderResourceAccessor(),
                     database
-            );
-            liquibase.update();
+            )) {
+                liquibase.update();
+            }
         } catch (Exception e) {
             throw new IllegalStateException("Failed to run Liquibase migrations for ProductRepositoryTest", e);
         }

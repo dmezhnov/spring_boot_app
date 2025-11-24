@@ -44,10 +44,6 @@ public class UserRepositoryImpl implements UserRepository {
                 Timestamp.valueOf(user.createdAt)
         );
 
-        if (generatedId == null) {
-            throw new IllegalStateException("Failed to generate user ID");
-        }
-
         user.id = generatedId;
         return user;
     }
