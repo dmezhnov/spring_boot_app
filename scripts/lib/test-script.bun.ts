@@ -4,7 +4,11 @@ export class TestScript {
   private readonly runner = new ProcessRunner();
 
   async run(): Promise<void> {
-    const withBruno = process.env.TEST_WITH_BRUNO === "true";
+    const runGradleEnv = process.env.TEST_RUN_GRADLE;
+    const runBrunoEnv = process.env.TEST_RUN_BRUNO;
+
+    const runGradle = runGradleEnv === undefined ? true : runGradleEnv === "true";
+    const runBruno = runBrunoEnv === "true";
 
     let started = false;
     const startCode = await this.runner.runExitCode(["mise", "x", "bun", "--", "bun", "run", "scripts/start.bun.ts"]);
@@ -14,10 +18,12 @@ export class TestScript {
     started = true;
 
     let exitCode = 0;
-    const gradle = await this.runner.runExitCode(["gradle", "test"]);
-    if (gradle !== 0) exitCode = gradle;
+    if (runGradle) {
+      const gradle = await this.runner.runExitCode(["gradle", "test"]);
+      if (gradle !== 0) exitCode = gradle;
+    }
 
-    if (withBruno) {
+    if (runBruno) {
       const bruno = await this.runner.runExitCode(["bash", "-lc", "cd bruno && mise run test-bruno"]);
       if (bruno !== 0) exitCode = exitCode || bruno;
     }

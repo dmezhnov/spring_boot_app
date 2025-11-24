@@ -31,12 +31,27 @@ run = '''
 '''
 
 [tasks.test]
-description = "Run Gradle tests by default; use --full to include Bruno API tests"
+description = "Run Gradle tests by default; use --bruno for Bruno only or --full for all tests"
 usage = '''
-flag "--full" help="Run full test suite including Bruno API tests"
+flag "--bruno" help="Run only Bruno API tests"
+flag "--full" help="Run full test suite (Gradle + Bruno)"
 '''
 run = '''
-    TEST_WITH_BRUNO="${usage_full:-false}" mise x bun -- bun run scripts/test.bun.ts
+    BRUNO="${usage_bruno:-false}"
+    FULL="${usage_full:-false}"
+
+    TEST_RUN_GRADLE="true"
+    TEST_RUN_BRUNO="false"
+
+    if [ "$BRUNO" = "true" ] && [ "$FULL" != "true" ]; then
+      TEST_RUN_GRADLE="false"
+      TEST_RUN_BRUNO="true"
+    elif [ "$FULL" = "true" ]; then
+      TEST_RUN_GRADLE="true"
+      TEST_RUN_BRUNO="true"
+    fi
+
+    TEST_RUN_GRADLE="$TEST_RUN_GRADLE" TEST_RUN_BRUNO="$TEST_RUN_BRUNO" mise x bun -- bun run scripts/test.bun.ts
 '''
 
 [tasks.build]
