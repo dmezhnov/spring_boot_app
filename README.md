@@ -5,58 +5,109 @@ Spring Boot application with REST controllers for working with JSON data.
 ### Project Structure
 
 ```text
-src/
-├── main/
-│   ├── java/
-│   │   └── com/
-│   │       └── example/
-│   │           ├── Application.java        // interface
-│   │           ├── ApplicationImpl.java    // Spring Boot entry point
-│   │           ├── controller/
-│   │           │   ├── ApiController.java
-│   │           │   ├── ProductController.java
-│   │           │   └── UserController.java
-│   │           ├── dto/
-│   │           │   ├── ProductRequest.java
-│   │           │   ├── ProductRequestImpl.java
-│   │           │   ├── ProductResponse.java
-│   │           │   ├── ProductResponseImpl.java
-│   │           │   ├── UserRequest.java
-│   │           │   ├── UserRequestImpl.java
-│   │           │   ├── UserResponse.java
-│   │           │   └── UserResponseImpl.java
-│   │           ├── register/
-│   │           │   ├── ProductRegister.java
-│   │           │   ├── ProductRegisterImpl.java
-│   │           │   ├── UserRegister.java
-│   │           │   └── UserRegisterImpl.java
-│   │           └── repository/
-│   │               ├── ProductRepository.java
-│   │               ├── ProductRepositoryImpl.java
-│   │               ├── UserRepository.java
-│   │               └── UserRepositoryImpl.java
-│   └── resources/
-│       ├── application.properties
-│       └── db/
-│           └── changelog/
-│               ├── db.changelog-master.yaml
-│               └── db.changelog-1.0-init.yaml
-└── test/
-    └── java/
-        └── com/
-            └── example/
-                ├── ApplicationTest.java
-                ├── dto/
-                │   ├── ProductRequestTest.java
-                │   ├── ProductResponseTest.java
-                │   ├── UserRequestTest.java
-                │   └── UserResponseTest.java
-                ├── register/
-                │   ├── ProductRegisterTest.java
-                │   └── UserRegisterTest.java
-                └── repository/
-                    ├── ProductRepositoryTest.java
-                    └── UserRepositoryTest.java
+.  // Project root
+├── README.md      // Project documentation and API/contracts
+├── build.gradle   // Gradle build configuration
+├── settings.gradle   // Gradle settings (root project name, modules)
+├── gradle.properties   // Shared Gradle properties
+├── mise.toml      // mise tasks and toolchain configuration
+├── configs/       // Infrastructure and environment configuration
+│   └── docker-compose.yml      // Dockerized PostgreSQL service for the app
+├── gradle/        // Gradle wrapper configuration
+│   └── wrapper/
+│       ├── gradle-wrapper.jar        // Gradle wrapper binary (generated)
+│       └── gradle-wrapper.properties        // Gradle wrapper settings
+├── scripts/       // Bun automation scripts for running and testing the app
+│   ├── start.bun.ts      // CLI entrypoint: start Docker + Spring Boot in background
+│   ├── stop.bun.ts      // CLI entrypoint: stop app and Docker resources started by scripts
+│   ├── test.bun.ts      // CLI entrypoint: run test suite (delegates to lib/test-script)
+│   ├── save.bun.ts      // CLI entrypoint for helper script defined in lib/save-script.bun.ts
+│   └── lib/      // Shared helpers for Bun scripts
+│       ├── process-runner.bun.ts        // Utility to run external processes with logging and error handling
+│       ├── run-env.bun.ts        // Central locations for run directories, state and log files
+│       ├── start-script.bun.ts        // Implementation of start logic (Docker + app boot)
+│       ├── stop-script.bun.ts        // Implementation of stop/cleanup logic
+│       └── test-script.bun.ts        // Implementation of test orchestration (Gradle + Bruno + cleanup)
+├── bruno/         // Bruno API test workspace
+│   ├── bruno.json      // Bruno collection configuration
+│   ├── mise.toml      // Local mise tasks for running Bruno tests
+│   ├── General/      // Bruno requests for general /api endpoints
+│   │   ├── Echo.bru        // Bruno request for "Echo" scenario
+│   │   ├── Info.bru        // Bruno request for "Info" scenario
+│   │   ├── Transform.bru        // Bruno request for "Transform" scenario
+│   │   └── Welcome.bru        // Bruno request for "Welcome" scenario
+│   ├── Products/      // Bruno requests for product endpoints
+│   │   ├── Apply Discount.bru        // Bruno request for discount scenario
+│   │   ├── Calculate Statistics.bru        // Bruno request for product statistics scenario
+│   │   ├── Create Product.bru        // Bruno request for product creation scenario
+│   │   └── Health Check.bru        // Bruno request for product health check
+│   ├── Users/      // Bruno requests for user endpoints
+│   │   ├── Health Check.bru        // Bruno request for user health check
+│   │   ├── Process User.bru        // Bruno request for user processing scenario
+│   │   ├── Register User.bru        // Bruno request for user registration scenario
+│   │   └── Validate User.bru        // Bruno request for user validation scenario
+│   └── test-bruno.bun.ts      // Bun script to run Bruno tests from this workspace
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           ├── Application.java      // Application interface (marker type)
+│   │   │           ├── ApplicationImpl.java      // Spring Boot entry point (@SpringBootApplication)
+│   │   │           ├── controller/      // REST controllers for API endpoints
+│   │   │           │   ├── ApiController.java        // Basic JSON utilities under /api
+│   │   │           │   ├── ProductController.java        // Product-related endpoints under /api/products
+│   │   │           │   └── UserController.java        // User-related endpoints under /api/users
+│   │   │           ├── dto/      // Data transfer object interfaces + implementations
+│   │   │           │   ├── ProductRequest.java        // Interface for product request DTO
+│   │   │           │   ├── ProductRequestImpl.java        // Public-field product request implementation
+│   │   │           │   ├── ProductResponse.java        // Interface for product response DTO
+│   │   │           │   ├── ProductResponseImpl.java        // Public-field product response implementation
+│   │   │           │   ├── UserRequest.java        // Interface for user request DTO
+│   │   │           │   ├── UserRequestImpl.java        // Public-field user request implementation
+│   │   │           │   ├── UserResponse.java        // Interface for user response DTO
+│   │   │           │   └── UserResponseImpl.java        // Public-field user response implementation
+│   │   │           ├── register/      // Application services (register/use-case layer)
+│   │   │           │   ├── ProductRegister.java        // Interface for product registration logic
+│   │   │           │   ├── ProductRegisterImpl.java        // Implementation: product calculations + persistence
+│   │   │           │   ├── UserRegister.java        // Interface for user processing/validation logic
+│   │   │           │   └── UserRegisterImpl.java        // Implementation: user processing/validation + persistence
+│   │   │           └── repository/      // Repositories for JDBC-based persistence
+│   │   │               ├── ProductRepository.java        // Contract for persisting/finding products
+│   │   │               ├── ProductRepositoryImpl.java        // JdbcTemplate-based product repository implementation
+│   │   │               ├── UserRepository.java        // Contract for persisting/finding users
+│   │   │               └── UserRepositoryImpl.java        // JdbcTemplate-based user repository implementation
+│   │   └── resources/
+│   │       ├── application.properties      // Spring Boot and datasource configuration
+│   │       └── db/
+│   │           └── changelog/
+│   │               ├── db.changelog-master.yaml      // Liquibase root changelog
+│   │               └── db.changelog-1.0-init.yaml      // Initial schema changelog
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── example/
+│                   ├── ApplicationTest.java      // Tests application entrypoint annotations
+│                   ├── dto/      // DTO-level tests
+│                   │   ├── ProductRequestTest.java        // Tests ProductRequestImpl builder and fields
+│                   │   ├── ProductResponseTest.java        // Tests ProductResponseImpl builder and fields
+│                   │   ├── UserRequestTest.java        // Tests UserRequestImpl builder and fields
+│                   │   └── UserResponseTest.java        // Tests UserResponseImpl builder and fields
+│                   ├── register/      // Service-layer tests for register implementations
+│                   │   ├── ProductRegisterTest.java        // Tests product register logic + persistence with PostgreSQL
+│                   │   └── UserRegisterTest.java        // Tests user register logic + persistence with PostgreSQL
+│                   └── repository/      // Repository-level integration tests
+│                       ├── ProductRepositoryTest.java        // Tests ProductRepositoryImpl with real PostgreSQL/Liquibase
+│                       └── UserRepositoryTest.java        // Tests UserRepositoryImpl with real PostgreSQL/Liquibase
+├── build/      // Generated Gradle build output (do not edit manually)
+│   ├── classes/      // Compiled main and test classes (generated)
+│   ├── generated/      // Generated sources and metadata (generated)
+│   ├── libs/      // Built application JARs (generated)
+│   ├── reports/      // Test and build reports (generated)
+│   ├── resources/      // Processed resources (generated)
+│   ├── test-results/      // Machine-readable test results (generated)
+│   ├── tmp/      // Temporary Gradle files and caches (generated)
+│   └── resolvedMainClassName      // Gradle-produced file with resolved main class (generated)
 ```
 
 ### API Endpoints
