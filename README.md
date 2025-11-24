@@ -165,7 +165,7 @@ src/
 3. **Calculate Statistics**
 
 - **URL**: `POST /api/products/calculate`
-- **Description**: Recalculate product statistics (total value and availability) based on the request body.
+- **Description**: Recalculate and persist product statistics (total value and availability) based on the request body, using the same logic as **Create Product** (the resulting product is saved to the database when a repository is configured).
 - **Request**: same as **Create Product**.
 - **Response**: product response JSON with calculated fields.
 
@@ -204,14 +204,21 @@ The application will start on `http://localhost:8080` and will use PostgreSQL fr
 #### Run all tests (Gradle + Bruno)
 
 ```bash
+# Gradle tests only (default)
 mise run test
+
+# Bruno API tests only
+mise run test --bruno
+
+# Full test suite: Gradle + Bruno
+mise run test --full
 ```
 
-This command will:
+All of these commands will:
 
 - ensure the Dockerized PostgreSQL and Spring Boot application are running (starting them if needed),
-- run Gradle tests,
-- run Bruno HTTP tests,
+- run Gradle tests when enabled for the chosen mode,
+- run Bruno HTTP tests when enabled for the chosen mode,
 - and then stop only the application environment and Docker resources that were started by the test script (pre-existing services are reused and left running).
 
 ### Configuration

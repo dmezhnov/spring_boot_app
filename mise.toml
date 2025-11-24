@@ -20,16 +20,6 @@ postinstall =  '''
     mise build
 '''
 
-[tasks.test-gradle]
-run = '''
-    gradle test
-'''
-
-[tasks.test-bruno]
-run = '''
-    cd bruno && mise run test-bruno
-'''
-
 [tasks.test]
 description = "Run Gradle tests by default; use --bruno for Bruno only or --full for all tests"
 usage = '''
@@ -70,7 +60,9 @@ run = '''
 '''
 
 [tasks.lint]
-run = ""
+run = '''
+    echo "Lint is not configured yet; no linters are currently run by 'mise run lint'."
+'''
 
 [tasks.format]
 run = ""

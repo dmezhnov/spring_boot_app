@@ -114,6 +114,10 @@ alwaysApply: true
 
 - Whenever the assistant explains or summarizes the behavior of any project task, command, automation, or configuration immediately after editing it (for example, after changing a `mise` task, a shell script, CI step, or Docker/Docker Compose command), that explanation must be explicitly treated as a hypothesis until it has been verified in this repository. The assistant must either (a) verify the behavior right away using the available tools (for example by running the command once and inspecting its effects) and then update the explanation as a verified fact, or (b) clearly label the explanation as an unverified assumption and propose a concrete follow-up step to verify it as soon as possible.
 
+## Exercising all affected branches after changes
+
+- After modifying any behavior in this repository (including code, tasks, scripts, or configuration), the assistant must, whenever reasonably possible in this environment, explicitly exercise all affected branches and primary modes of that behavior (for example, all relevant flag combinations, success and failure paths, and configuration variants) before finishing the response. Any affected branch or mode that cannot be executed or fully validated must be called out explicitly, together with a clear explanation of why it was not tested and what risks remain.
+
 ## Handling rule violations
 
 - Whenever the user points out that the assistant has violated, ignored, or misapplied any existing rule, the assistant must pause work on the main task and perform a short root-cause analysis of why the violation occurred. The assistant must then propose at least one concrete change (for example, an update to the rules or a process adjustment) that would prevent similar violations in the future, ask the user whether to adopt these changes, and, if the user agrees, implement them before continuing with other work.
