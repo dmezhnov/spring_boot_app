@@ -169,7 +169,7 @@ export class StartScript {
     }
     const jarRelPath = join("build", "libs", jarName);
 
-    const logHandle = await Bun.file(this.logFile).writer();
+    await Bun.write(this.logFile, "");
     let app;
     try {
       app = spawn(["java", "-jar", jarRelPath], {
@@ -178,7 +178,6 @@ export class StartScript {
         stderr: "pipe",
       });
     } catch (error) {
-      await logHandle.end();
       const message = error instanceof Error ? error.message : String(error);
       console.error("Error: failed to start Spring Boot process.");
       console.error(message);
@@ -197,16 +196,21 @@ export class StartScript {
       }
       process.exit(1);
     }
-    app.stdout?.pipeTo(logHandle.writable, { preventClose: true }).catch((error) => {
-      const message = error instanceof Error ? error.message : String(error);
-      console.warn("Warning: failed to pipe application stdout to log file.");
-      console.warn(message);
-    });
-    app.stderr?.pipeTo(logHandle.writable, { preventClose: true }).catch((error) => {
-      const message = error instanceof Error ? error.message : String(error);
-      console.warn("Warning: failed to pipe application stderr to log file.");
-      console.warn(message);
-    });
+
+    if (app.stdout) {
+      this.pipeStreamToFile(app.stdout).catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn("Warning: failed to pipe application stdout to log file.");
+        console.warn(message);
+      });
+    }
+    if (app.stderr) {
+      this.pipeStreamToFile(app.stderr).catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn("Warning: failed to pipe application stderr to log file.");
+        console.warn(message);
+      });
+    }
 
     if ((await Promise.race([app.exited, Bun.sleep(2000).then(() => -1)])) !== -1) {
       await logHandle.end();
@@ -229,7 +233,6 @@ export class StartScript {
 
     const healthy = await this.checkServerHealth();
     if (!healthy) {
-      await logHandle.end();
       console.error(`Error: Spring Boot application did not become healthy in time — see ${this.logFile}`);
       if (preStatus.status !== "running") {
         await this.runner.runCapture(["docker", "rm", "-f", this.containerName]).catch(() => {});
@@ -249,7 +252,6 @@ export class StartScript {
 
     await Bun.write(this.pidFile, String(app.pid));
     await this.appendState([`STARTED_APP=1`]);
-    await logHandle.end();
     console.log(`Spring Boot started in background (PID ${app.pid}). Logs: ${this.logFile}`);
   }
 
@@ -357,6 +359,23 @@ export class StartScript {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  private async pipeStreamToFile(stream: ReadableStream<Uint8Array>): Promise<void> {
+    const reader = stream.getReader();
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        if (value && value.length > 0) {
+          await Bun.write(this.logFile, value, { append: true });
+        }
+      }
+    } finally {
+      reader.releaseLock();
     }
   }
 }
