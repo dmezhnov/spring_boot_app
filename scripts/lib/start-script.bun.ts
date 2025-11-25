@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { spawn } from "bun";
 import { ProcessRunner } from "./process-runner.bun.ts";
 import { RunEnv } from "./run-env.bun.ts";
+import { DockerCli } from "./docker-cli.bun.ts";
 
 export class StartScript {
   private readonly runner = new ProcessRunner();
@@ -13,16 +14,21 @@ export class StartScript {
   private readonly projectRoot = RunEnv.projectRoot;
   private readonly containerName = "spring-boot-app-postgres";
   private readonly networkName = "configs_default";
+  private readonly dockerCli = new DockerCli(this.runner);
+  private dockerCommand: string = "docker";
 
   async run(): Promise<void> {
     await this.ensureDirs();
     await Bun.write(this.stateFile, "");
 
-    const whichDocker = await this.runner.runCapture(platform === "win32" ? ["where", "docker"] : ["which", "docker"]);
-    if (whichDocker.code !== 0) {
-      console.error("Error: docker is not installed or not in PATH.");
+    const dockerBinary = await this.dockerCli.resolveDockerBinary();
+    if (!dockerBinary) {
+      console.error(
+        "Error: docker is not installed, not in PATH, and Docker Desktop CLI was not found in the default location.",
+      );
       process.exit(1);
     }
+    this.dockerCommand = dockerBinary;
 
     const wasRunning = await this.dockerAvailable();
     if (!wasRunning) {
@@ -47,7 +53,7 @@ export class StartScript {
     const preNet = await this.networkExists(this.networkName);
     const upCmd =
       compose === "compose"
-        ? ["docker", "compose", "-f", "configs/docker-compose.yml", "up", "-d", "postgres"]
+        ? [this.dockerCommand, "compose", "-f", "configs/docker-compose.yml", "up", "-d", "postgres"]
         : ["docker-compose", "-f", "configs/docker-compose.yml", "up", "-d", "postgres"];
     const up = await this.runner.run(upCmd);
     if (up.code !== 0) {
@@ -117,7 +123,7 @@ export class StartScript {
       return;
     }
 
-    const build = await this.runner.run(["gradle", "build", "bootJar"]);
+    const build = await this.runner.run(["gradle", "bootJar"]);
     if (build.code !== 0) {
       console.error("Error: failed to build Spring Boot application (bootJar).");
       if (preStatus.status !== "running") {
@@ -257,7 +263,7 @@ export class StartScript {
   }
 
   private async dockerAvailable(): Promise<boolean> {
-    const r = await this.runner.runCapture(["docker", "info"]);
+    const r = await this.runner.runCapture([this.dockerCommand, "info"]);
     return r.code === 0;
   }
 
@@ -300,9 +306,9 @@ export class StartScript {
     status: string;
     health: string;
   }> {
-    const status = await this.runner.runCapture(["docker", "inspect", "-f", "{{ .State.Status }}", name]);
+    const status = await this.runner.runCapture([this.dockerCommand, "inspect", "-f", "{{ .State.Status }}", name]);
     const health = await this.runner.runCapture([
-      "docker",
+      this.dockerCommand,
       "inspect",
       "-f",
       "{{ if .State.Health }}{{ .State.Health.Status }}{{ end }}",
@@ -315,7 +321,7 @@ export class StartScript {
   }
 
   private async networkExists(name: string): Promise<boolean> {
-    const r = await this.runner.runCapture(["docker", "network", "inspect", name]);
+    const r = await this.runner.runCapture([this.dockerCommand, "network", "inspect", name]);
     return r.code === 0;
   }
 

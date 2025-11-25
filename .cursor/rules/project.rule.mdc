@@ -167,3 +167,11 @@ alwaysApply: true
 - Descriptions, comments, names (including variable, method, class, and endpoint names), configuration keys, and tests in this repository must accurately reflect the actual behavior, contracts, and data structures implemented in the codebase; they must not describe functionality, fields, or semantics that do not exist, and must be updated together with any behavior change.
 - README files and other documentation must be kept in sync with the implemented public-facing APIs (such as REST endpoints, DTO structures, and observable behavior of scripts and tasks), so that external callers can rely on them as accurate contracts.
 - When changing behavior, data shapes, or interfaces (for example, modifying a REST endpoint, DTO field set, or repository contract), the corresponding comments, tests, and documentation that describe this behavior must be reviewed and updated in the same change set to maintain consistency.
+
+## Semantics of mise tasks for build/start/test
+
+- The `mise run build` task must compile only the main (production) sources without compiling or running tests.
+- The `mise run build --test` task must compile the test sources (and their main-source dependencies) without running tests.
+- The `mise run build --full` task must compile both main and test sources without running tests.
+- The `mise run start` task must build only the production artifact needed to start the Spring Boot application (for example via `gradle bootJar`) and then start the application, without running tests.
+- The `mise run test` task must ensure that the application and its PostgreSQL environment are started if necessary, then compile both main and test sources and run the automated test suite.

@@ -3,6 +3,7 @@ import { platform } from "node:process";
 import { spawn } from "bun";
 import { ProcessRunner } from "./process-runner.bun.ts";
 import { RunEnv } from "./run-env.bun.ts";
+import { DockerCli } from "./docker-cli.bun.ts";
 
 export class StopScript {
   private readonly runner = new ProcessRunner();
@@ -10,6 +11,8 @@ export class StopScript {
   private readonly pidFile = RunEnv.pidFile;
   private readonly defaultContainerName = "spring-boot-app-postgres";
   private readonly defaultNetworkName = "configs_default";
+  private readonly dockerCli = new DockerCli(this.runner);
+  private dockerCommand: string | null = null;
 
   async run(): Promise<void> {
     const state = await this.readState();
@@ -19,6 +22,15 @@ export class StopScript {
     const startedDocker = Number(state["STARTED_DOCKER"] ?? 0) === 1;
     const containerName = state["CONTAINER_NAME"] ?? this.defaultContainerName;
     const networkName = state["NETWORK_NAME"] ?? this.defaultNetworkName;
+
+    if (startedPg || startedNet || startedDocker) {
+      const dockerBinary = await this.dockerCli.resolveDockerBinary();
+      if (!dockerBinary) {
+        console.warn("Warning: docker CLI is not available; skipping Docker cleanup in StopScript.");
+      } else {
+        this.dockerCommand = dockerBinary;
+      }
+    }
 
     if (startedApp) {
       try {
@@ -32,11 +44,15 @@ export class StopScript {
     }
 
     if (startedPg) {
-      await this.runner.runExitCode(["docker", "rm", "-f", containerName]).catch(() => -1);
+      if (this.dockerCommand) {
+        await this.runner.runExitCode([this.dockerCommand, "rm", "-f", containerName]).catch(() => -1);
+      }
     }
 
     if (startedNet) {
-      await this.runner.runExitCode(["docker", "network", "rm", networkName]).catch(() => -1);
+      if (this.dockerCommand) {
+        await this.runner.runExitCode([this.dockerCommand, "network", "rm", networkName]).catch(() => -1);
+      }
     }
 
     if (startedDocker) {
@@ -84,7 +100,10 @@ export class StopScript {
 
   private async maybeStopDockerDaemon(): Promise<void> {
     try {
-      const ps = spawn(["docker", "ps", "-q"], { stdout: "pipe", stderr: "ignore" });
+      if (!this.dockerCommand) {
+        return;
+      }
+      const ps = spawn([this.dockerCommand, "ps", "-q"], { stdout: "pipe", stderr: "ignore" });
       const [code, buf] = await Promise.all([ps.exited, ps.stdout!.arrayBuffer()]);
       const alive = code === 0 && new TextDecoder().decode(buf).trim().length > 0;
       if (!alive) {

@@ -31,8 +31,13 @@ run = '''
 '''
 
 [tasks.build]
+description = "Compile main and/or test sources without running tests"
+usage = '''
+flag "--test" help="Compile test sources (and their main dependencies) only"
+flag "--full" help="Compile both main and test sources"
+'''
 run = '''
-    gradle build
+    mise x bun -- bun run scripts/build.bun.ts
 '''
 
 [tasks.start]
