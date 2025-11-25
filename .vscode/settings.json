@@ -70,9 +70,6 @@
     "gitconfig-lsp.format.gitattributes.tabSize": 16,
     "java.format.settings.url": "configs/java-formatter.xml",
     "java.help.showReleaseNotes": false,
-    "java.project.outputPath": "src",
-    "java.project.referencedLibraries": [],
-    "java.project.sourcePaths": ["src"],
     "material-icon-theme.files.associations": {
         "**.clasp.json": "Apps-script",
         "**.claspignore": "Apps-script",
