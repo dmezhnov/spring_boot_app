@@ -7,27 +7,33 @@ Spring Boot application with REST controllers for working with JSON data.
 ```text
 .  // Project root
 ├── README.md      // Project documentation and API/contracts
+├── ROADMAP.md      // High-level roadmap of planned improvements
+├── ROADMAP.ru.md      // Russian translation of the project roadmap
 ├── build.gradle   // Gradle build configuration
 ├── settings.gradle   // Gradle settings (root project name, modules)
 ├── gradle.properties   // Shared Gradle properties
 ├── mise.toml      // mise tasks and toolchain configuration
 ├── configs/       // Infrastructure and environment configuration
-│   └── docker-compose.yml      // Dockerized PostgreSQL service for the app
+│   ├── docker-compose.yml      // Dockerized PostgreSQL service for the app
+│   └── java-formatter.xml      // Java code style/formatter profile for IDEs
 ├── gradle/        // Gradle wrapper configuration
 │   └── wrapper/
 │       ├── gradle-wrapper.jar        // Gradle wrapper binary (generated)
 │       └── gradle-wrapper.properties        // Gradle wrapper settings
-├── scripts/       // Bun automation scripts for running and testing the app
+├── scripts/       // Bun automation scripts for running, building and testing the app
 │   ├── start.bun.ts      // CLI entrypoint: start Docker + Spring Boot in background
 │   ├── stop.bun.ts      // CLI entrypoint: stop app and Docker resources started by scripts
 │   ├── test.bun.ts      // CLI entrypoint: run test suite (delegates to lib/test-script)
+│   ├── build.bun.ts      // CLI entrypoint: build Gradle sources (delegates to lib/build-script.bun.ts)
 │   ├── save.bun.ts      // CLI entrypoint for helper script defined in lib/save-script.bun.ts
 │   └── lib/      // Shared helpers for Bun scripts
 │       ├── process-runner.bun.ts        // Utility to run external processes with logging and error handling
 │       ├── run-env.bun.ts        // Central locations for run directories, state and log files
+│       ├── docker-cli.bun.ts        // Helper to resolve Docker CLI binary on different platforms
 │       ├── start-script.bun.ts        // Implementation of start logic (Docker + app boot)
 │       ├── stop-script.bun.ts        // Implementation of stop/cleanup logic
-│       └── test-script.bun.ts        // Implementation of test orchestration (Gradle + Bruno + cleanup)
+│       ├── test-script.bun.ts        // Implementation of test orchestration (Gradle + Bruno + cleanup)
+│       └── save-script.bun.ts        // Implementation of Git draft-branch save/push workflow
 ├── bruno/         // Bruno API test workspace
 │   ├── bruno.json      // Bruno collection configuration
 │   ├── mise.toml      // Local mise tasks for running Bruno tests
@@ -99,6 +105,7 @@ Spring Boot application with REST controllers for working with JSON data.
 │                   └── repository/      // Repository-level integration tests
 │                       ├── ProductRepositoryTest.java        // Tests ProductRepositoryImpl with real PostgreSQL/Liquibase
 │                       └── UserRepositoryTest.java        // Tests UserRepositoryImpl with real PostgreSQL/Liquibase
+├── node_modules/      // Node.js/Bun dependencies for tooling and scripts (generated)
 ├── build/      // Generated Gradle build output (do not edit manually)
 │   ├── classes/      // Compiled main and test classes (generated)
 │   ├── generated/      // Generated sources and metadata (generated)
