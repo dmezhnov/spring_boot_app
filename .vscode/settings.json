@@ -68,7 +68,7 @@
     "gitconfig-lsp.format.gitattributes.hardTab": false,
     "gitconfig-lsp.format.gitattributes.hardTabWidth": 4,
     "gitconfig-lsp.format.gitattributes.tabSize": 16,
-    "java.format.settings.url": "./.trunk/configs/java-formatter.xml",
+    "java.format.settings.url": "configs/java-formatter.xml",
     "java.help.showReleaseNotes": false,
     "java.project.outputPath": "src",
     "java.project.referencedLibraries": [],
@@ -250,5 +250,7 @@
     "editor.inlineSuggest.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', FiraCode, Consolas, 'Courier New', monospace",
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "bruno.defaultCollectionLocation": "./bruno"
+    "bruno.defaultCollectionLocation": "./bruno",
+    "java.import.gradle.enabled": true,
+    "java.import.maven.enabled": false
 }
