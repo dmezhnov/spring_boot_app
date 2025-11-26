@@ -1,23 +1,20 @@
 package com.example.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-
 /**
- * Response DTO for user data
+ * Interface for user response DTO.
+ * Implementations must expose data via public fields, not getters/setters.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserResponseImpl response = UserResponseImpl.builder()
+ *     .id(1L)
+ *     .name("Alice")
+ *     .email("alice@example.com")
+ *     .age(30)
+ *     .status("ACTIVE")
+ *     .build();
+ * }
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class UserResponse {
-    public Long id;
-    public String name;
-    public String email;
-    public int age;
-    public String status;
-    public LocalDateTime createdAt;
+public interface UserResponse {
+    // Marker interface for user response DTO.
 }

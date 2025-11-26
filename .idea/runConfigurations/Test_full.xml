@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test full" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
+    <mise configEnvironment="" taskName="test" workingDirectory="$PROJECT_DIR$" taskParams="--full">
+      <envs />
+    </mise>
+    <method v="2" />
+  </configuration>
+</component>

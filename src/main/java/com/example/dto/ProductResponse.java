@@ -1,24 +1,18 @@
 package com.example.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
- * Response DTO for product
+ * Interface for product response DTO.
+ * Implementations must expose data via public fields, not getters/setters.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductResponseImpl response = ProductResponseImpl.builder()
+ *     .id(1L)
+ *     .title("Phone")
+ *     .totalValue(200.0)
+ *     .build();
+ * }
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ProductResponse {
-    public Long id;
-    public String title;
-    public String description;
-    public double price;
-    public int quantity;
-    public double totalValue;
-    public String category;
-    public boolean available;
+public interface ProductResponse {
+    // Marker interface for product response DTO.
 }

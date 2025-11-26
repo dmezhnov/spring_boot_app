@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalDependencies">
+    <plugin id="EclipseCodeFormatter" />
+    <plugin id="PMDPlugin" />
+    <plugin id="TestNG-J" />
+    <plugin id="com.github.l34130.mise" />
+    <plugin id="com.intellij.gradle" />
+    <plugin id="com.intellij.java" />
+    <plugin id="com.intellij.spring.boot" />
+    <plugin id="org.editorconfig.editorconfigjetbrains" />
+  </component>
+</project>

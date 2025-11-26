@@ -1,12 +1,85 @@
 package com.example.controller;
 
-import com.example.dto.ProductRequest;
-import com.example.dto.ProductResponse;
+import com.example.dto.ProductRequestImpl;
+import com.example.dto.ProductResponseImpl;
+import com.example.register.ProductRegisterImpl;
+import com.example.repository.ProductRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-public interface ProductController {
-	ResponseEntity<ProductResponse> createProduct(ProductRequest request);
-	ResponseEntity<ProductResponse> applyDiscount(ProductRequest request, double discount);
-	ResponseEntity<ProductResponse> calculateStats(ProductRequest request);
-	ResponseEntity<String> health();
+/**
+ * REST controller for product operations such as creation, discount application and statistics.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRequestImpl request = ProductRequestImpl.builder()
+ *     .title("Phone")
+ *     .price(100.0)
+ *     .quantity(2)
+ *     .build();
+ * ResponseEntity<ProductResponseImpl> response = productController.createProduct(request);
+ * }
+ */
+@RestController
+@RequestMapping("/api/products")
+public class ProductController {
+
+	@Autowired
+	private ProductRegisterImpl productService;
+
+	@Autowired
+	private ProductRepositoryImpl productRepository;
+
+	@PostMapping("/create")
+	public ResponseEntity<ProductResponseImpl> createProduct(@RequestBody ProductRequestImpl request) {
+		try {
+			ProductResponseImpl response = productService.createProduct(request);
+			return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	@PostMapping("/discount")
+	public ResponseEntity<ProductResponseImpl> applyDiscount(
+			@RequestBody ProductRequestImpl request,
+			@RequestParam(defaultValue = "10") double discount) {
+		try {
+			ProductResponseImpl response = productService.applyDiscount(request, discount);
+			return ResponseEntity.ok(response);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	@PostMapping("/calculate")
+	public ResponseEntity<ProductResponseImpl> calculateStats(@RequestBody ProductRequestImpl request) {
+		try {
+			ProductResponseImpl response = productService.createProduct(request);
+			return ResponseEntity.ok(response);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	@GetMapping("/health")
+	public ResponseEntity<String> health() {
+		return ResponseEntity.ok("Product service is healthy");
+	}
+
+	@GetMapping("/by-title")
+	public ResponseEntity<ProductResponseImpl> getByTitle(@RequestParam String title) {
+		if (title == null || title.isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
+		try {
+			ProductResponseImpl response = productRepository.findByTitle(title);
+			return ResponseEntity.ok(response);
+		} catch (EmptyResultDataAccessException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 }

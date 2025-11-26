@@ -1,5 +1,4 @@
 {
-    "MS-CST-E.vscode-devskim.rules.customRulesPaths": ["./.trunk/configs/.devskim.json"],
     "atlascode.jira.todoIssues.triggers": ["!!", "BUG", "TODO", "- [ ]"],
     "cssToStylus.indent": 4,
     "editor.codeActionsOnSave": {},
@@ -69,11 +68,8 @@
     "gitconfig-lsp.format.gitattributes.hardTab": false,
     "gitconfig-lsp.format.gitattributes.hardTabWidth": 4,
     "gitconfig-lsp.format.gitattributes.tabSize": 16,
-    "java.format.settings.url": "./.trunk/configs/java-formatter.xml",
+    "java.format.settings.url": "configs/java-formatter.xml",
     "java.help.showReleaseNotes": false,
-    "java.project.outputPath": "src",
-    "java.project.referencedLibraries": [],
-    "java.project.sourcePaths": ["src"],
     "material-icon-theme.files.associations": {
         "**.clasp.json": "Apps-script",
         "**.claspignore": "Apps-script",
@@ -232,27 +228,26 @@
         "plaintext": true
     },
     "chat.instructionsFilesLocations": {
-        ".github/instructions": true
+        ".cursor/rules": true
     },
     "chat.promptFilesLocations": {
-        ".github/prompts": true
+        ".cursor/prompts": true
     },
     "trunk.addToolsToPath": false,
     "trunk.autoInit": false,
     "trunk.enableUpgradePane": false,
     "trunk.inlineDecoratorsForAllExtensions": true,
     "trunk.trace.server": "messages",
-    "[gitconfig]": {
-        "editor.defaultFormatter": "yy0931.gitconfig-lsp"
-    },
-    "editor.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', Consolas, 'Courier New', monospace",
+    "editor.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', FiraCode, Consolas, 'Courier New', monospace",
     "editor.fontLigatures": true,
     "editor.renderWhitespace": "all",
     "editor.experimentalWhitespaceRendering": "font",
-    "editor.codeLensFontFamily": "fira-code-nerd, 'FiraCode Nerd Font', Consolas, 'Courier New', monospace",
-    "debug.console.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', Consolas, 'Courier New', monospace",
-    "editor.inlineSuggest.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', Consolas, 'Courier New', monospace",
+    "editor.codeLensFontFamily": "fira-code-nerd, 'FiraCode Nerd Font', FiraCode, Consolas, 'Courier New', monospace",
+    "debug.console.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', FiraCode, Consolas, 'Courier New', monospace",
+    "editor.inlineSuggest.fontFamily": "fira-code-nerd, 'FiraCode Nerd Font', FiraCode, Consolas, 'Courier New', monospace",
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "bruno.defaultCollectionLocation": "./bruno"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "bruno.defaultCollectionLocation": "./bruno",
+    "java.import.gradle.enabled": true,
+    "java.import.maven.enabled": false
 }

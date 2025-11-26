@@ -3,11 +3,20 @@ package com.example.dto;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
+/**
+ * Tests for {@link ProductRequestImpl} builder and public fields.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductRequestTest test = new ProductRequestTest();
+ * test.builderAndFields();
+ * }
+ */
 class ProductRequestTest {
 
     @Test
-    void builderAndGetters() {
-        ProductRequest r = ProductRequest.builder()
+    void builderAndFields() {
+        ProductRequestImpl r = ProductRequestImpl.builder()
                 .title("T")
                 .description("D")
                 .price(1.5)

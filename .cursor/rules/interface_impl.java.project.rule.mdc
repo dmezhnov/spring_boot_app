@@ -1,0 +1,56 @@
+---
+description: Enforce interface-first design with Impl suffix for implementations
+---
+
+## Java Interface + Impl Naming Rule
+
+In this repository, every concrete implementation class in scope must have a corresponding interface, and the implementation class must be named with the `Impl` suffix. Controllers are explicitly excluded from this pattern and MUST NOT have separate interfaces.
+
+- MUST:
+  - Define a public interface for each concrete class in scope (all non-controller Java classes, including DTOs, entities, configuration classes, utilities, helpers, exceptions, and any other non-controller types).
+  - Place the interface in the same package as its implementation.
+  - Annotate ONLY the implementation with framework/DI/web annotations (e.g., `@Service`, `@Component`, `@RestController`, `@RequestMapping`, `@Transactional`).
+  - For non-controller types, ensure that an interface exists but inject and refer to beans by their concrete implementation class type (`<InterfaceName>Impl`) in application code. Do not inject or reference project-owned beans by their interface type unless a third-party API explicitly requires an interface.
+  - Keep method signatures identical between interface and implementation.
+- MUST NOT:
+  - Introduce a concrete class without a corresponding interface (see exclusions below).
+  - Name an implementation class anything other than `<InterfaceName>Impl`.
+  - Put Spring MVC mapping annotations on interfaces; they belong on implementations.
+  - Create interfaces for controllers; controllers must be implemented as concrete classes only.
+- SCOPE:
+  - Applies to all Java classes in this project except controllers.
+  - Exclusions: controllers (they MUST be implemented without interfaces and MUST NOT have corresponding controller interfaces).
+- MIGRATION:
+  - Rename all existing non-controller concrete classes to follow the pattern `<InterfaceName>Impl`, create the corresponding interface `<InterfaceName>` for each such class, and update all injections/usages to refer to the implementation type `<InterfaceName>Impl` rather than the interface type.
+  - If multiple implementations exist, use `@Qualifier` on injection points.
+- REVIEW GATE:
+  - Reject changes that add concrete classes without interfaces or violate the `<InterfaceName>Impl` naming.
+  - Reject changes that introduce controller interfaces.
+  - Request conversion to interface + implementation with correct naming for all non-controller classes, and to concrete-only classes for controllers.
+  - Reject changes that inject or refer to non-controller project-owned beans by their interface type instead of their `<InterfaceName>Impl` implementation type, unless a third-party API explicitly requires an interface.
+
+### Examples
+
+Service
+```java
+// Interface
+public interface UserRegister {
+    UserResponse processUser(UserRequest request);
+    UserResponse validateUser(UserRequest request);
+}
+
+// Implementation
+@Service
+public class UserRegisterImpl implements UserRegister {
+    // ...
+}
+```
+
+Controller (no interface)
+```java
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    // ...
+}
+```

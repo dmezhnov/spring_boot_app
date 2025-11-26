@@ -1,0 +1,49 @@
+---
+description: Enforce field-only data access in Java (no getters/setters)
+---
+
+## Java Field-Only Data Access Rule
+
+In this repository, generating or using getters/setters is prohibited for Java classes defined in this project. Use direct public-field access only for project-owned types. If a future dedicated rule for a specific case (for example, a JPA entity rule) ever allows getters/setters, it must be added explicitly and only after the user confirms that such an exception is acceptable. Calling getters/setters on third-party or framework types (for example, classes from Spring, JPA, or external SDKs) is allowed when it is required by their public APIs.
+
+- MUST:
+  - Declare data-carrying fields that are part of external data models (for example, DTOs, request/response objects, and other public API models) as public (`public`). Internal technical or infrastructure fields that are not part of the exposed data model may remain non-public.
+  - Access data via fields: `request.name`, `response.status`, etc.
+  - Prefer Lombok annotations that do NOT generate getters/setters: `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@EqualsAndHashCode`, `@ToString`.
+- MUST NOT:
+  - Add getters/setters to project classes, either as explicitly declared `getX()/setX()/isX()` methods or via Lombok annotations `@Getter`, `@Setter`, or `@Data`. Other Lombok annotations are allowed unless they are explicitly added to this MUST NOT list in a future revision of this rule, even if they generate getters/setters.
+  - Call `getX()/setX()` or `isX()` in controllers, services, or tests for project types; rely on direct field access instead.
+- SCOPE:
+  - Applies to all Java code in this project (all production and test Java source files, including DTOs, entities, services, helpers, utilities, tests, and any other project-owned types).
+  - If future entities or integrations require a different approach for project-owned types (for example, JPA or third-party frameworks), add a dedicated rule that explicitly exempts those specific types or packages.
+- MIGRATION:
+  - For project-owned types, replace `getX()/setX()` with direct field access `.x`.
+  - For booleans in project-owned types, use `.available` instead of `isAvailable()`.
+  - Jackson serializes/deserializes public fields of project-owned types out of the box; getters/setters are not required for them.
+- REVIEW GATE:
+  - Reject changes that add getters/setters or Lombok annotations that generate them.
+  - Propose converting to public fields and updating call sites.
+
+Examples
+
+Bad:
+```java
+@Data
+public class UserRequest {
+    private String name;
+}
+// ...
+if (req.getName() == null) { /* ... */ }
+```
+
+Good:
+```java
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserRequest {
+    public String name;
+}
+// ...
+if (req.name == null) { /* ... */ }
+```

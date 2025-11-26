@@ -1,6 +1,5 @@
 [settings]
 windows_shim_mode = "symlink"
-asdf_compat = true
 yes = true
 experimental = true
 auto_install = true
@@ -8,6 +7,7 @@ exec_auto_install = true
 not_found_auto_install = true
 task_run_auto_install = true
 lockfile = true
+all_compile = false
 
 [settings.npm]
 bun = true
@@ -15,35 +15,58 @@ bun = true
 [settings.status]
 missing_tools = "always"
 
-[env]
-_.file = '.env'
-
 [hooks]
 postinstall =  '''
     mise build
 '''
 
-[tasks.test-gradle]
-run = '''
-    gradle test
-'''
-
-[tasks.test-bruno]
-run = '''
-    cd .vscode/bruno-collections && bun i --no-save && bun run test-bruno.bun.ts
-'''
-
 [tasks.test]
+description = "Run Gradle tests by default; use --bruno for Bruno only or --full for all tests"
+usage = '''
+flag "--bruno" help="Run only Bruno API tests"
+flag "--full" help="Run full test suite (Gradle + Bruno)"
+'''
 run = '''
-    mise run test-gradle && mise run test-bruno
+    mise x bun -- bun run scripts/test.bun.ts
 '''
 
 [tasks.build]
+description = "Compile main and/or test sources without running tests"
+usage = '''
+flag "--test" help="Compile test sources (and their main dependencies) only"
+flag "--full" help="Compile both main and test sources"
+'''
 run = '''
-    gradle build
+    mise x bun -- bun run scripts/build.bun.ts
 '''
 
 [tasks.start]
 run = '''
-    mise build bootJar && java -jar build/libs/spring-boot-app-1.0.0.jar
+    mise x bun -- bun run scripts/start.bun.ts
 '''
+
+[tasks.stop]
+run = '''
+    mise x bun -- bun run scripts/stop.bun.ts
+'''
+
+[tasks.lint]
+run = '''
+    echo "Lint is not configured yet; no linters are currently run by 'mise run lint'."
+'''
+
+[tasks.format]
+run = ""
+
+[tasks.save]
+run = '''
+    mise x bun -- bun run scripts/save.bun.ts
+'''
+
+[tasks.install]
+run = '''
+    mise install
+'''
+
+[env]
+MISE_HTTP_TIMEOUT="300000"

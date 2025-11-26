@@ -3,11 +3,20 @@ package com.example.dto;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
+/**
+ * Tests for {@link ProductResponseImpl} builder and public fields.
+ *
+ * <p>Usage example:
+ * {@code
+ * ProductResponseTest test = new ProductResponseTest();
+ * test.builderAndFields();
+ * }
+ */
 class ProductResponseTest {
 
     @Test
     void builderAndFields() {
-        ProductResponse r = ProductResponse.builder()
+        ProductResponseImpl r = ProductResponseImpl.builder()
                 .id(10L)
                 .title("X")
                 .description("Y")

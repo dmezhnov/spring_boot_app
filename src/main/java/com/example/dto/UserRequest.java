@@ -1,19 +1,18 @@
 package com.example.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
- * Request DTO for user data
+ * Interface for user request DTO.
+ * Implementations must expose data via public fields, not getters/setters.
+ *
+ * <p>Usage example:
+ * {@code
+ * UserRequestImpl request = UserRequestImpl.builder()
+ *     .name("Alice")
+ *     .email("alice@example.com")
+ *     .age(30)
+ *     .build();
+ * }
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class UserRequest {
-    public String name;
-    public String email;
-    public int age;
+public interface UserRequest {
+    // Marker interface for user request DTO.
 }
