@@ -3,7 +3,6 @@ import { RunEnv } from "./run-env.bun.ts";
 import { join } from "node:path";
 import { StartScript } from "./start-script.bun.ts";
 import { StopScript } from "./stop-script.bun.ts";
-import { spawn } from "bun";
 
 export class TestScript {
   private readonly runner = new ProcessRunner();
@@ -11,7 +10,6 @@ export class TestScript {
   async run(): Promise<void> {
     const brunoFlag = process.env.usage_bruno === "true";
     const fullFlag = process.env.usage_full === "true";
-
     let runGradle = true;
     let runBruno = false;
 
@@ -39,18 +37,13 @@ export class TestScript {
     if (runBruno) {
       const brunoCwd = join(RunEnv.projectRoot, "bruno");
       let brunoExit = 0;
-      try {
-        const proc = spawn([process.argv[0], "run", "test-bruno.bun.ts"], {
-          cwd: brunoCwd,
-          stdout: "inherit",
-          stderr: "inherit",
-        });
-        brunoExit = await proc.exited;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        console.error("Error: failed to run Bruno tests.");
-        console.error(message);
-        brunoExit = -1;
+      const brunoRunner = new ProcessRunner(brunoCwd);
+      const trustExit = await brunoRunner.runExitCode(["mise", "trust", "mise.toml"]);
+      if (trustExit !== 0) {
+        console.error("Error: failed to trust bruno/mise.toml for mise. Bruno tests will be skipped.");
+        brunoExit = trustExit;
+      } else {
+        brunoExit = await brunoRunner.runExitCode(["mise", "run", "test-bruno"]);
       }
       if (brunoExit !== 0) {
         exitCode = exitCode || brunoExit;

@@ -4,7 +4,7 @@ Spring Boot application with REST controllers for working with JSON data.
 
 ### Project Structure
 
-```text
+```tree
 .  // Project root
 ├── README.md      // Project documentation and API/contracts
 ├── ROADMAP.md      // High-level roadmap of planned improvements
@@ -246,6 +246,7 @@ Spring Boot application with REST controllers for working with JSON data.
 #### Install tools and build the project
 
 ```bash
+mise trust --all
 mise install   # or: mise i
 ```
 
@@ -259,7 +260,7 @@ mise run start
 
 The application will start on `http://localhost:8080` and will use PostgreSQL from `configs/docker-compose.yml`.
 
-#### Run all tests (Gradle + Bruno)
+#### Run tests
 
 ```bash
 # Gradle tests only (default)
