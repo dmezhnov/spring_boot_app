@@ -2,6 +2,12 @@
 
 Spring Boot application with REST controllers for working with JSON data.
 
+### Requirements
+
+- [Mise](https://mise.jdx.dev/installing-mise.html)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+
 ### Project Structure
 
 ```tree
